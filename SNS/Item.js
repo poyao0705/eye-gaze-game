@@ -63,4 +63,6 @@ class Item extends SvgPlus {
       return this._progress;
     }
   }
+
+  export default Item;
   

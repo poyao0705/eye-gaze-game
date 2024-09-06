@@ -118,7 +118,7 @@ class BedroomWindow extends SvgPlus {
       this.items = this.createChild("div");
       this.editable = editable;
       this.correctItems = [];
-      this.selectedItems = [];
+    //   this.selectedItems = [];
       this.itemsOnScreen = [];
   
       app.onValue("itemsOnScreen", (itemsOnScreen) => {
@@ -468,3 +468,4 @@ class BedroomWindow extends SvgPlus {
       }
     }
   }
+  export default BedroomWindow;
