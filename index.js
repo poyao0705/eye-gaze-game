@@ -3,7 +3,7 @@ import {
   SquidlyApp,
 } from "https://session-app.squidly.com.au/src/Apps/app-class.js";
 import BedroomWindow from "./SNS/BedroomWindow.js";
-
+import EyePaint from "./EyePaint/eyepaint.js";
 // const itemPositions = {
 //   Standard: [
 //     { top: "53%", left: "47%", name: "teddybear" },
@@ -647,6 +647,19 @@ class MainWindow extends SvgPlus {
         border: "solid 8px #466596",
       },
     });
+
+    if (isSender) {
+      this.artRoom.addEventListener("mouseover", () => {
+        this.artRoom.styles = { cursor: "pointer" };
+      });
+      this.artRoom.addEventListener("mouseout", () => {
+        this.artRoom.styles = { cursor: "auto" };
+      });
+      this.artRoom.addEventListener("click", () => {
+        app.set("room", "artRoom");
+      });
+    }
+    
     let mivin = homeDiv.createChild("img", {
       src: "http://127.0.0.1:5502/images/mivin.svg",
       styles: {
@@ -709,6 +722,9 @@ class MainWindow extends SvgPlus {
         if (this.bedroom) {
           this.bedroom.styles = { display: "none" };
         }
+        if (this.eyepaint) {
+          this.eyepaint.styles = { display: "none" };
+        }
 
         homeDiv.styles = { display: "block" };
       } else if (value === "levels") {
@@ -766,6 +782,17 @@ class MainWindow extends SvgPlus {
           this.mainDiv.appendChild(this.bedroom);
         } else {
           this.bedroom.styles = { display: "block" };
+        }
+      } else if (value === "artRoom") {
+        
+        homeDiv.styles = { display: "none" };
+
+        this.eyepaint = document.getElementById("eyePaint");
+        if (!this.eyepaint) {
+          this.eyepaint = new EyePaint(isSender, app);
+          this.mainDiv.appendChild(this.eyepaint);
+        } else {
+          this.eyepaint.styles = { display: "block" };
         }
       }
     });

@@ -1,0 +1,19 @@
+Todo
+- Syncing colouring changes, and when navigating into and away from EyePaint
+
+- Eraser button, I've added a separate select and unselect eraser svg to make it clear when you've selected the eraser.
+It seems tricky to implement, I was thinking when you select the eraser it paints sections white. But you need to account
+for the fact that they could've selected a colour to paint with so then you kinda have 2 things selected and it doesn't make
+sense. Also, you need to somehow make the eventListener (for each section) listen for both the eraser and colouring in.
+
+- The SVG xml is hard-coded in the variable 'svgString'; need to find a way to get this data automatically.
+
+- Styling improvements maybe since it's quite plain rn.
+
+- Screen to select different images.
+
+- Formatting as always... a lot of hard-coded pixel values, so it's not responsive to different screen sizes.
+
+- Music/sound effects.
+
+- Note: right now it saves your drawing as long as you stay in the Eye'm'Home app.
