@@ -3,7 +3,9 @@ import {
   SquidlyApp,
 } from "https://session-app.squidly.com.au/src/Apps/app-class.js";
 import BedroomWindow from "./SNS/BedroomWindow.js";
-import EyePaint from "./EyePaint/eyepaint.js";
+// import EyePaint from "./EyePaint/eyepaint.js";
+import EyePaint from "./Eye_Paint/eyepaint.js";
+
 // const itemPositions = {
 //   Standard: [
 //     { top: "53%", left: "47%", name: "teddybear" },
@@ -534,10 +536,309 @@ async function waitFrame() {
 //   }
 // }
 
+// class MainWindow extends SvgPlus {
+//   constructor(isSender, app) {
+//     super("div");
+
+//     this.styles = {
+//       position: "absolute",
+//       display: "flex",
+//       "justify-content": "center",
+//       "align-items": "center",
+//       width: "100%",
+//       height: "100%",
+//       top: "50%",
+//       left: "50%",
+//       transform: "translate(-50%, -50%)",
+//     };
+
+//     window.addEventListener("resize", () => {
+//       this.updateHomeStyles();
+//     });
+
+//     let audio = this.createChild("audio", {
+//       src: "http://127.0.0.1:5502/sounds/home.mp3",
+//     });
+//     let effect = this.createChild("audio", {
+//       src: "http://127.0.0.1:5502/sounds/effect.mp3",
+//     });
+//     app.set("muted", true);
+
+//     // Create home and volume button on clinician side in the same position every time
+//     if (isSender) {
+//       this.buttonRow = this.createChild("div", {
+//         styles: {
+//           position: "absolute",
+//           top: "0",
+//           left: "0",
+//           margin: "10px 10px 0 150px",
+//           "z-index": "2",
+//         },
+//       });
+
+//       this.homeButton = new HomeButton(app);
+//       this.volumeButton = new VolumeButton(app);
+//       this.buttonRow.appendChild(this.homeButton);
+//       this.buttonRow.appendChild(this.volumeButton);
+//     }
+
+//     this.mainDiv = this;
+//     // Home screen
+//     let homeDiv = this.createChild("div", { styles: { position: "relative" } });
+//     homeDiv.props = {
+//       id: "house",
+//     };
+//     this.homeDiv = homeDiv;
+//     let house = homeDiv.createChild("img", {
+//       src: "http://127.0.0.1:5502/images/house.svg",
+//       styles: {
+//         width: "100%",
+//         height: "100%",
+//       },
+//     });
+//     this.house = house;
+//     this.findItemRoom = homeDiv.createChild("img", {
+//       src: "http://127.0.0.1:5502/images/SightnSeek.svg",
+//       styles: {
+//         position: "absolute",
+//         height: "20.5%",
+//         top: "36.5%",
+//         right: "33.7%",
+//         border: "solid 8px #466596",
+//       },
+//     });
+//     if (isSender) {
+//       this.findItemRoom.addEventListener("mouseover", () => {
+//         this.findItemRoom.styles = { cursor: "pointer" };
+//       });
+//       this.findItemRoom.addEventListener("mouseout", () => {
+//         this.findItemRoom.styles = { cursor: "auto" };
+//       });
+//       this.findItemRoom.addEventListener("click", () => {
+//         app.set("room", "levels");
+//       });
+//     }
+
+//     this.kitchenRoom = homeDiv.createChild("img", {
+//       src: "http://127.0.0.1:5502/images/EyeSpell.svg",
+//       styles: {
+//         position: "absolute",
+//         height: "20.5%",
+//         top: "67.2%",
+//         right: "33.7%",
+//         border: "solid 8px #466596",
+//       },
+//     });
+//     this.musicRoom = homeDiv.createChild("img", {
+//       src: "http://127.0.0.1:5502/images/PianoTrials.svg",
+//       styles: {
+//         position: "absolute",
+//         height: "20.5%",
+//         top: "36.5%",
+//         right: "9.7%",
+//         border: "solid 8px #466596",
+//       },
+//     });
+//     this.artRoom = homeDiv.createChild("img", {
+//       src: "http://127.0.0.1:5502/images/EyePaint.svg",
+//       styles: {
+//         position: "absolute",
+//         height: "20.5%",
+//         top: "67.2%",
+//         right: "9.7%",
+//         border: "solid 8px #466596",
+//       },
+//     });
+//     let mivin = homeDiv.createChild("img", {
+//       src: "http://127.0.0.1:5502/images/mivin.svg",
+//       styles: {
+//         position: "absolute",
+//         height: "22%",
+//         top: "12.2%",
+//         right: "21.6%",
+//       },
+//     });
+
+//     // Update volume on both sides
+//     app.onValue("muted", (value) => {
+//       console.log("muted", value);
+//       if (value) {
+//         // Mute logic
+//         if (this.volumeButton) {
+//           this.volumeButton.props = {
+//             src: "http://127.0.0.1:5502/images/volume-mute.svg",
+//           };
+//         }
+//         audio.muted = true;
+//         effect.muted = true;
+//       } else {
+//         // Unmute logic
+//         if (this.volumeButton) {
+//           this.volumeButton.props = {
+//             src: "http://127.0.0.1:5502/images/volume.svg",
+//           };
+//         }
+//         audio.muted = false;
+//         effect.muted = false;
+//         audio.load();
+//         audio.loop = true;
+//         audio.play();
+//       }
+//     });
+
+//     app.onValue("room", (value) => {
+//       // Triggers once immediately after the listener is attached, to provide the current value of the data
+//       if (value === "home") {
+//         app.set("state", "setup");
+
+//         if (audio.src !== "http://127.0.0.1:5502/sounds/home.mp3") {
+//           // From SightnSeek to home screen
+//           audio.src = "http://127.0.0.1:5502/sounds/home.mp3";
+//           audio.volume = 1;
+//           audio.play();
+//         }
+
+//         if (isSender) {
+//           if (this.backButton) {
+//             this.backButton.styles = { display: "none" };
+//           }
+//         }
+
+//         this.levelScreen = document.getElementById("level-screen");
+//         if (this.levelScreen) {
+//           this.levelScreen.styles = { display: "none" };
+//         }
+//         if (this.bedroom) {
+//           this.bedroom.styles = { display: "none" };
+//         }
+
+//         homeDiv.styles = { display: "block" };
+//       } else if (value === "levels") {
+//         if (audio.src !== "http://127.0.0.1:5502/sounds/home.mp3") {
+//           // From SightnSeek to home screen
+//           audio.src = "http://127.0.0.1:5502/sounds/home.mp3";
+//           audio.volume = 1;
+//           audio.play();
+//         }
+
+//         homeDiv.styles = { display: "none" };
+//         if (this.bedroom) {
+//           this.bedroom.styles = { display: "none" };
+//         }
+
+//         if (isSender) {
+//           if (this.backButton) {
+//             this.backButton.styles = { display: "none" };
+//           }
+//         }
+
+//         this.levelScreen = document.getElementById("level-screen");
+//         if (!this.levelScreen) {
+//           this.levelScreen = new LevelScreen(app, isSender);
+//           this.mainDiv.appendChild(this.levelScreen);
+//         } else {
+//           this.levelScreen.styles = { display: "block" };
+//         }
+//       } else if (value === "game") {
+//         audio.src = "http://127.0.0.1:5502/sounds/bedroom-background.mp3";
+//         audio.volume = 0.5;
+//         audio.load();
+//         audio.play();
+
+//         homeDiv.styles = { display: "none" };
+//         if (isSender) {
+//           // add the back button on the game screen
+//           if (!this.backButton) {
+//             this.backButton = new BackButton(app);
+//             this.buttonRow.insertBefore(
+//               this.backButton,
+//               this.buttonRow.firstChild
+//             );
+//           } else {
+//             this.backButton.styles = { display: "inline-block" };
+//           }
+//         }
+
+//         if (this.levelScreen) {
+//           this.levelScreen.styles = { display: "none" };
+//         }
+
+//         if (!this.bedroom) {
+//           this.bedroom = new BedroomWindow(isSender, app, effect);
+//           this.mainDiv.appendChild(this.bedroom);
+//         } else {
+//           this.bedroom.styles = { display: "block" };
+//         }
+//       }
+//     });
+//     this.updateAspectRatio();
+//   }
+
+//   // pass eye data to the actual game
+//   set eyePosition(vector) {
+//     if (this.bedroom) {
+//       this.bedroom.eyePosition = vector;
+//     }
+//   }
+
+//   async updateAspectRatio() {
+//     while (true) {
+//       let parent = this.offsetParent;
+//       if (parent) {
+//         let houseBackgroundAspectRatio =
+//           this.house.naturalWidth / this.house.naturalHeight;
+
+//         let aspectRatio = parent.offsetWidth / parent.offsetHeight;
+//         if (aspectRatio < houseBackgroundAspectRatio) {
+//           this.house.style.width = "100%";
+//           this.house.style.height = "auto";
+//           this.homeDiv.style.width = "100%";
+//           this.homeDiv.style.height = "auto";
+//         } else {
+//           this.homeDiv.style.width = "auto";
+//           this.homeDiv.style.height = "100%";
+//           this.house.style.width = "auto";
+//           this.house.style.height = "100%";
+//         }
+//       }
+//       await waitFrame();
+//     }
+//   }
+
+//   // reduce the border size of the images on the home screen based on the screen size
+//   updateHomeStyles() {
+//     const screenWidth = window.innerWidth;
+//     let images = document.querySelectorAll("#house img");
+//     let games = Array.from(images).slice(1, 5);
+
+//     if (screenWidth < 1200) {
+//       for (const index in games) {
+//         games[index].styles = {
+//           border: "solid 4px #466596",
+//         };
+//       }
+//     } else {
+//       for (const index in games) {
+//         games[index].styles = {
+//           border: "solid 8px #466596",
+//         };
+//       }
+//     }
+//   }
+// }
+
 class MainWindow extends SvgPlus {
   constructor(isSender, app) {
     super("div");
 
+    let effect = this.createChild("audio", {
+      src: "http://127.0.0.1:5502/sounds/effect.mp3",
+    });
+    
+    this.app = app;
+    this.isSender = isSender;
+    this.effect = effect;
+    // this.props = { id: "main-window" };
     this.styles = {
       position: "absolute",
       display: "flex",
@@ -550,305 +851,15 @@ class MainWindow extends SvgPlus {
       transform: "translate(-50%, -50%)",
     };
 
-    window.addEventListener("resize", () => {
-      this.updateHomeStyles();
-    });
+    // this.createChild(EyePaint, {}, [this.editable, this.app]);
+    // add eyepaint game to the main window
+    // this.createChild(EyePaint, {}, [this.isSender, this.app]);
+    // i want to instatiate the eyepaint game here
+    let eyepaint = new EyePaint(this.isSender, this.app, this.effect);
+    let eyepaintDiv = this.createChild("div");
+    eyepaintDiv.appendChild(eyepaint);
+    console.log("eyepaint", eyepaint);
 
-    let audio = this.createChild("audio", {
-      src: "http://127.0.0.1:5502/sounds/home.mp3",
-    });
-    let effect = this.createChild("audio", {
-      src: "http://127.0.0.1:5502/sounds/effect.mp3",
-    });
-    app.set("muted", true);
-
-    // Create home and volume button on clinician side in the same position every time
-    if (isSender) {
-      this.buttonRow = this.createChild("div", {
-        styles: {
-          position: "absolute",
-          top: "0",
-          left: "0",
-          margin: "10px 10px 0 150px",
-          "z-index": "2",
-        },
-      });
-
-      this.homeButton = new HomeButton(app);
-      this.volumeButton = new VolumeButton(app);
-      this.buttonRow.appendChild(this.homeButton);
-      this.buttonRow.appendChild(this.volumeButton);
-    }
-
-    this.mainDiv = this;
-    // Home screen
-    let homeDiv = this.createChild("div", { styles: { position: "relative" } });
-    homeDiv.props = {
-      id: "house",
-    };
-    this.homeDiv = homeDiv;
-    let house = homeDiv.createChild("img", {
-      src: "http://127.0.0.1:5502/images/house.svg",
-      styles: {
-        width: "100%",
-        height: "100%",
-      },
-    });
-    this.house = house;
-    this.findItemRoom = homeDiv.createChild("img", {
-      src: "http://127.0.0.1:5502/images/SightnSeek.svg",
-      styles: {
-        position: "absolute",
-        height: "20.5%",
-        top: "36.5%",
-        right: "33.7%",
-        border: "solid 8px #466596",
-      },
-    });
-    if (isSender) {
-      this.findItemRoom.addEventListener("mouseover", () => {
-        this.findItemRoom.styles = { cursor: "pointer" };
-      });
-      this.findItemRoom.addEventListener("mouseout", () => {
-        this.findItemRoom.styles = { cursor: "auto" };
-      });
-      this.findItemRoom.addEventListener("click", () => {
-        app.set("room", "levels");
-      });
-    }
-
-    this.kitchenRoom = homeDiv.createChild("img", {
-      src: "http://127.0.0.1:5502/images/EyeSpell.svg",
-      styles: {
-        position: "absolute",
-        height: "20.5%",
-        top: "67.2%",
-        right: "33.7%",
-        border: "solid 8px #466596",
-      },
-    });
-    this.musicRoom = homeDiv.createChild("img", {
-      src: "http://127.0.0.1:5502/images/PianoTrials.svg",
-      styles: {
-        position: "absolute",
-        height: "20.5%",
-        top: "36.5%",
-        right: "9.7%",
-        border: "solid 8px #466596",
-      },
-    });
-    this.artRoom = homeDiv.createChild("img", {
-      src: "http://127.0.0.1:5502/images/EyePaint.svg",
-      styles: {
-        position: "absolute",
-        height: "20.5%",
-        top: "67.2%",
-        right: "9.7%",
-        border: "solid 8px #466596",
-      },
-    });
-
-    if (isSender) {
-      this.artRoom.addEventListener("mouseover", () => {
-        this.artRoom.styles = { cursor: "pointer" };
-      });
-      this.artRoom.addEventListener("mouseout", () => {
-        this.artRoom.styles = { cursor: "auto" };
-      });
-      this.artRoom.addEventListener("click", () => {
-        app.set("room", "artRoom");
-      });
-    }
-    
-    let mivin = homeDiv.createChild("img", {
-      src: "http://127.0.0.1:5502/images/mivin.svg",
-      styles: {
-        position: "absolute",
-        height: "22%",
-        top: "12.2%",
-        right: "21.6%",
-      },
-    });
-
-    // Update volume on both sides
-    app.onValue("muted", (value) => {
-      console.log("muted", value);
-      if (value) {
-        // Mute logic
-        if (this.volumeButton) {
-          this.volumeButton.props = {
-            src: "http://127.0.0.1:5502/images/volume-mute.svg",
-          };
-        }
-        audio.muted = true;
-        effect.muted = true;
-      } else {
-        // Unmute logic
-        if (this.volumeButton) {
-          this.volumeButton.props = {
-            src: "http://127.0.0.1:5502/images/volume.svg",
-          };
-        }
-        audio.muted = false;
-        effect.muted = false;
-        audio.load();
-        audio.loop = true;
-        audio.play();
-      }
-    });
-
-    app.onValue("room", (value) => {
-      // Triggers once immediately after the listener is attached, to provide the current value of the data
-      if (value === "home") {
-        app.set("state", "setup");
-
-        if (audio.src !== "http://127.0.0.1:5502/sounds/home.mp3") {
-          // From SightnSeek to home screen
-          audio.src = "http://127.0.0.1:5502/sounds/home.mp3";
-          audio.volume = 1;
-          audio.play();
-        }
-
-        if (isSender) {
-          if (this.backButton) {
-            this.backButton.styles = { display: "none" };
-          }
-        }
-
-        this.levelScreen = document.getElementById("level-screen");
-        if (this.levelScreen) {
-          this.levelScreen.styles = { display: "none" };
-        }
-        if (this.bedroom) {
-          this.bedroom.styles = { display: "none" };
-        }
-        if (this.eyepaint) {
-          this.eyepaint.styles = { display: "none" };
-        }
-
-        homeDiv.styles = { display: "block" };
-      } else if (value === "levels") {
-        if (audio.src !== "http://127.0.0.1:5502/sounds/home.mp3") {
-          // From SightnSeek to home screen
-          audio.src = "http://127.0.0.1:5502/sounds/home.mp3";
-          audio.volume = 1;
-          audio.play();
-        }
-
-        homeDiv.styles = { display: "none" };
-        if (this.bedroom) {
-          this.bedroom.styles = { display: "none" };
-        }
-
-        if (isSender) {
-          if (this.backButton) {
-            this.backButton.styles = { display: "none" };
-          }
-        }
-
-        this.levelScreen = document.getElementById("level-screen");
-        if (!this.levelScreen) {
-          this.levelScreen = new LevelScreen(app, isSender);
-          this.mainDiv.appendChild(this.levelScreen);
-        } else {
-          this.levelScreen.styles = { display: "block" };
-        }
-      } else if (value === "game") {
-        audio.src = "http://127.0.0.1:5502/sounds/bedroom-background.mp3";
-        audio.volume = 0.5;
-        audio.load();
-        audio.play();
-
-        homeDiv.styles = { display: "none" };
-        if (isSender) {
-          // add the back button on the game screen
-          if (!this.backButton) {
-            this.backButton = new BackButton(app);
-            this.buttonRow.insertBefore(
-              this.backButton,
-              this.buttonRow.firstChild
-            );
-          } else {
-            this.backButton.styles = { display: "inline-block" };
-          }
-        }
-
-        if (this.levelScreen) {
-          this.levelScreen.styles = { display: "none" };
-        }
-
-        if (!this.bedroom) {
-          this.bedroom = new BedroomWindow(isSender, app, effect);
-          this.mainDiv.appendChild(this.bedroom);
-        } else {
-          this.bedroom.styles = { display: "block" };
-        }
-      } else if (value === "artRoom") {
-        
-        homeDiv.styles = { display: "none" };
-
-        this.eyepaint = document.getElementById("eyePaint");
-        if (!this.eyepaint) {
-          this.eyepaint = new EyePaint(isSender, app);
-          this.mainDiv.appendChild(this.eyepaint);
-        } else {
-          this.eyepaint.styles = { display: "block" };
-        }
-      }
-    });
-    this.updateAspectRatio();
-  }
-
-  // pass eye data to the actual game
-  set eyePosition(vector) {
-    if (this.bedroom) {
-      this.bedroom.eyePosition = vector;
-    }
-  }
-
-  async updateAspectRatio() {
-    while (true) {
-      let parent = this.offsetParent;
-      if (parent) {
-        let houseBackgroundAspectRatio =
-          this.house.naturalWidth / this.house.naturalHeight;
-
-        let aspectRatio = parent.offsetWidth / parent.offsetHeight;
-        if (aspectRatio < houseBackgroundAspectRatio) {
-          this.house.style.width = "100%";
-          this.house.style.height = "auto";
-          this.homeDiv.style.width = "100%";
-          this.homeDiv.style.height = "auto";
-        } else {
-          this.homeDiv.style.width = "auto";
-          this.homeDiv.style.height = "100%";
-          this.house.style.width = "auto";
-          this.house.style.height = "100%";
-        }
-      }
-      await waitFrame();
-    }
-  }
-
-  // reduce the border size of the images on the home screen based on the screen size
-  updateHomeStyles() {
-    const screenWidth = window.innerWidth;
-    let images = document.querySelectorAll("#house img");
-    let games = Array.from(images).slice(1, 5);
-
-    if (screenWidth < 1200) {
-      for (const index in games) {
-        games[index].styles = {
-          border: "solid 4px #466596",
-        };
-      }
-    } else {
-      for (const index in games) {
-        games[index].styles = {
-          border: "solid 8px #466596",
-        };
-      }
-    }
   }
 }
 
