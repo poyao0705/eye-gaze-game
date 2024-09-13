@@ -92,24 +92,28 @@ class EyePaint extends SvgPlus {
       id: "eyePaint"
     };
 
+    
+
+    // this.app.onValue("selectedImage", (selectedImage) => {
+    //   this.selectedImage = selectedImage;
+    // });
+
     this.app.onValue("state", (state) => {
       this.State = state;
-    });
-
-    this.app.onValue("selectedImage", (selectedImage) => {
-      this.selectedImage = selectedImage;
     });
 
     this.app.onValue("colorUpdates", (update) => {
       // this.applyColourUpdates(updates);
       this.applyColourUpdate(update);
     });
-    this.State = "load";
+    this.State = ["load", null];
     // this.State = "paint";
   }
 
   set State(params) {
-    switch (params) {
+    let [state, selectedImage] = [...params];
+    this.selectedImage = selectedImage;
+    switch (state) {
       case "load":
         this.loadImageOptions();
         break;
@@ -134,8 +138,9 @@ class EyePaint extends SvgPlus {
       });
       if (this.editable) {
         imageOption.addEventListener("click", () => {
-          this.app.set("selectedImage", image);
-          this.app.set("state", "paint");
+          console.log(image);
+          // this.app.set("selectedImage", image);
+          this.app.set("state", ["paint", image]);
         });
       }
     }
@@ -144,6 +149,7 @@ class EyePaint extends SvgPlus {
   paintImage(selectedImage) {
     this.displayContent.innerHTML = "";
     const svgContent = svgAssets[selectedImage];
+    console.log(svgContent);
     const parser = new DOMParser();
     const svgDoc = parser.parseFromString(svgContent, "image/svg+xml");
     const svgElement = svgDoc.documentElement;
@@ -249,7 +255,7 @@ class EyePaint extends SvgPlus {
           const update = { id: elementId, color: this.selectedColour };
           console.log('Sending color update:', update);
           this.applyColourUpdate(update);
-          this.app.set("colorUpdates", update);
+          this.app.set("colorUpdates/"+element.id, this.selectedColour);
         }
       };
     });
@@ -257,18 +263,27 @@ class EyePaint extends SvgPlus {
   }
   
   applyColourUpdate(update) {
-    if (!update || !update.id) {
+    if (!update) {
       console.warn('Invalid update received:', update);
       return;
     }
-    
-    const element = this.displayContent.querySelector(`#${update.id}`);
-    if (element) {
-      element.style.fill = update.color;
-      console.log(`Applied color ${update.color} to element with id ${update.id}`);
-    } else {
-      console.warn(`Element with id ${update.id} not found`);
+    for (const id in update) {
+      const element = this.displayContent.querySelector(`#${id}`);
+      if (element) {
+        element.style.fill = update[id];
+        console.log(`Applied color ${update[id]} to element with id ${id}`);
+      } else {
+        console.warn(`Element with id ${id} not found`);
+      }
     }
+    
+    // const element = this.displayContent.querySelector(`#${update.id}`);
+    // if (element) {
+    //   element.style.fill = update.color;
+    //   console.log(`Applied color ${update.color} to element with id ${update.id}`);
+    // } else {
+    //   console.warn(`Element with id ${update.id} not found`);
+    // }
   }
 
   resetColours() {
