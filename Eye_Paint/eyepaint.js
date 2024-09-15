@@ -80,6 +80,8 @@ class EyePaint extends SvgPlus {
     this.editable = editable;
 
     this.selectedColour = null;
+    // this.selectedButton = null;
+
     this.displayContent = this.createChild("div", {
       styles: {
         border: "10px solid white",
@@ -181,9 +183,32 @@ class EyePaint extends SvgPlus {
 
     this.contentRight = this.createChild("div", {
       styles: {
-        display: "flex"
+        display: "flex",
+        "flex-wrap": "wrap",
+        "justify-content": "end"
       },
     });
+
+    const camera = this.contentRight.createChild("img", {
+      src: "http://127.0.0.1:5502/images/EyePaint/camera.svg",
+      styles: {
+        width: "22.5%",
+        height: "10%",
+        margin: "0 0.5em 0 0",
+        cursor: "pointer",
+      },
+    });
+
+    const back = this.contentRight.createChild("img", {
+      src: "http://127.0.0.1:5502/images/EyePaint/back.svg",
+      styles: {
+        width: "22.5%",
+        height: "10%",
+        margin: "0 0.5em 0 0",
+        cursor: "pointer",
+      },
+    });
+
     this.reference = this.contentRight.createChild("img", {
       src: `http://127.0.0.1:5502/images/eyepaint/dog.svg`,
       styles: {
@@ -222,7 +247,7 @@ class EyePaint extends SvgPlus {
       const button = colourPicker.createChild("button", {
         styles: {
           width: "35%",   
-          height: "13%",
+          height: "13.5%",
           "padding-left": "2em",
           "padding-right": "2em",   
           "border-radius": "50%", 
@@ -242,6 +267,16 @@ class EyePaint extends SvgPlus {
       };
       button.onmouseout = () => {
         button.styles = { transform: "scale(1)" };
+      };
+      // Creates a border when the button is clicked on and removes it when it is not
+      button.onfocus = () => {
+        button.styles = { 
+            outline: "none",
+            "box-shadow": "0 0 0 3px rgba(66, 153, 225, 0.5)"
+        }
+      };
+      button.onblur = () => {
+          button.styles = { "box-shadow": "none" };
       };
     });
 
