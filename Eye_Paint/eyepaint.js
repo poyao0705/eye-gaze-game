@@ -68,32 +68,35 @@ const svgAssets = {
 };
 
 const colours = [
-  '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF',
-  '#FFA500', '#800080', '#008000', '#000080', '#800000', '#008080'
+  '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#000000',
+  '#FFA500', '#800080', '#008000', '#000080', '#800000', '#FFFFFF'
 ];
 
 class EyePaint extends SvgPlus {
-  constructor(editable, app, effect) {
+  constructor(editable, app) {
     super("div");
+
     this.app = app;
-    this.effect = effect;
     this.editable = editable;
+
     this.selectedColour = null;
     this.displayContent = this.createChild("div");
 
     this.styles = {
-      display: "flex",
-      "justify-content": "center",
-      height: "100vh",
-      margin: "0"
+      height: "100%",
+      width: "100%",
+      display: "grid",
+      "grid-template-columns": "20% 1fr 10%",
+      "background-image": "url('http://127.0.0.1:5502/images/EyePaint/background.jfif')",
+      "background-size": "cover",
+      "background-position": "center",
+      "background-repeat": "repeat",
+      "z-index": "1"
     };
 
     this.props = {
       id: "eyePaint"
     };
-
-    
-
     // this.app.onValue("selectedImage", (selectedImage) => {
     //   this.selectedImage = selectedImage;
     // });
@@ -148,26 +151,38 @@ class EyePaint extends SvgPlus {
 
   paintImage(selectedImage) {
     this.displayContent.innerHTML = "";
+
     const svgContent = svgAssets[selectedImage];
-    console.log(svgContent);
-    const parser = new DOMParser();
-    const svgDoc = parser.parseFromString(svgContent, "image/svg+xml");
-    const svgElement = svgDoc.documentElement;
-    
-    // Set a fixed size for the SVG container
-    svgElement.style.width = "500px";
-    svgElement.style.height = "500px";
-    
+    const svgElement = SvgPlus.parseSVGString(svgContent);
+    svgElement.style.width = "80%";
+    svgElement.style.height = "80%";
     this.displayContent.appendChild(svgElement);
     
     // Reset all colors to white
     svgElement.querySelectorAll("path, g, circle, rect").forEach((element) => {
       element.style.fill = "white";
     });
-    
-    this.addColourButtons();
     this.setupSVGInteraction(svgElement);
+
+    // Add colour palette
+    const colourPicker = this.addColourButtons();
+    // Swap colourPicker with the SVG so that colourPicker is on the left
+    this.insertBefore(colourPicker, this.displayContent);
   }
+
+  shadeColour(colour, percent) {
+    // Slightly darken the colour by reducing the RGB values by 0.7
+    let R = Math.min(255, parseInt(parseInt(colour.substring(1, 3), 16) * percent)); // R = first two bytes of hexadecimal - 16 bits
+    let G = Math.min(255, parseInt(parseInt(colour.substring(3, 5), 16) * percent));
+    let B = Math.min(255, parseInt(parseInt(colour.substring(5, 7), 16) * percent)); 
+    
+     // RGB to hex conversion and add any required zero padding
+    const RR = ((R.toString(16).length === 1) ? "0" + R.toString(16) : R.toString(16));
+    const GG = ((G.toString(16).length === 1) ? "0" + G.toString(16) : G.toString(16));
+    const BB = ((B.toString(16).length === 1) ? "0" + B.toString(16) : B.toString(16));
+  
+    return "#" + RR + GG + BB;
+  };
 
   addColourButtons() {
     const colourPicker = this.createChild("div", {
@@ -175,20 +190,20 @@ class EyePaint extends SvgPlus {
         display: "flex",
         "flex-wrap": "wrap",
         "justify-content": "center",
-        "max-width": "800px",
-        margin: "20px auto",
       },
     });
 
     colours.forEach((colour) => {
       const button = colourPicker.createChild("button", {
         styles: {
-          width: "50px",
-          height: "50px",
-          borderRadius: "50%",
-          background: colour,
+          width: "40%",   
+          height: "auto",
+          "padding-left": "2em",
+          "padding-right": "2em",   
+          "border-radius": "50%", 
+          background: `linear-gradient(225deg, ${colour} 70%, ${this.shadeColour(colour, 0.7)} 100%)`,
           border: "2px solid #ccc",
-          margin: "5px",
+          margin: "1em",
           cursor: "pointer",
           transition: "transform 0.2s",
         },
@@ -197,7 +212,7 @@ class EyePaint extends SvgPlus {
         this.selectedColour = colour;
       });
       button.onmouseover = () => {
-        button.styles = { transform: "scale(1.2)" };
+        button.styles = { transform: "scale(1.1)" };
       };
       button.onmouseout = () => {
         button.styles = { transform: "scale(1)" };
@@ -205,6 +220,7 @@ class EyePaint extends SvgPlus {
     });
 
     this.addControlButtons(colourPicker);
+    return colourPicker;
   }
 
   addControlButtons(colourPicker) {

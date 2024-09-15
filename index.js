@@ -45,11 +45,11 @@ import EyePaint from "./Eye_Paint/eyepaint.js";
 
 // const backgroundAspectRatio = 1077 / 600;
 
-async function waitFrame() {
-  return new Promise((resolve) => {
-    requestAnimationFrame(resolve);
-  });
-}
+// async function waitFrame() {
+//   return new Promise((resolve) => {
+//     requestAnimationFrame(resolve);
+//   });
+// }
 // Item class for Sight N' Seek Game
 // class Item extends SvgPlus {
 //   constructor(params) {
@@ -827,225 +827,208 @@ async function waitFrame() {
 //   }
 // }
 
+// class VolumeButton extends SvgPlus {
+//   constructor(app) {
+//     super("img");
+//     this.app = app;
+
+//     this.styles = {
+//       position: "relative",
+//       width: "64px",
+//       height: "64px",
+//       "margin-bottom": "10px",
+//     };
+
+//     this.addEventListener("click", async () => {
+//       if (await this.getMuted()) {
+//         app.set("muted", false);
+//       } else {
+//         app.set("muted", true);
+//       }
+//     });
+
+//     this.addEventListener("mouseover", () => {
+//       this.styles = { cursor: "pointer" };
+//     });
+//     this.addEventListener("mouseout", () => {
+//       this.styles = { cursor: "auto" };
+//     });
+//   }
+
+//   async getMuted() {
+//     let isMuted = await this.app.get("muted");
+//     return isMuted;
+//   }
+// }
+
+// class HomeButton extends SvgPlus {
+//   constructor(app) {
+//     super("img");
+
+//     this.props = { src: "http://127.0.0.1:5502/images/home.svg" };
+//     this.styles = {
+//       position: "relative",
+//       width: "64px",
+//       height: "64px",
+//       "margin-bottom": "10px",
+//       "margin-right": "10px",
+//     };
+
+//     this.addEventListener("mouseover", () => {
+//       this.styles = { cursor: "pointer" };
+//     });
+//     this.addEventListener("mouseout", () => {
+//       this.styles = { cursor: "auto" };
+//     });
+//     this.addEventListener("click", () => {
+//       app.set("room", "home");
+//     });
+//   }
+// }
+
+// class BackButton extends SvgPlus {
+//   constructor(app) {
+//     super("img");
+
+//     this.props = { src: "http://127.0.0.1:5502/images/back.svg" };
+//     this.styles = {
+//       position: "relative",
+//       width: "64px",
+//       height: "64px",
+//       "margin-bottom": "10px",
+//       "margin-right": "10px",
+//     };
+
+//     this.addEventListener("mouseover", () => {
+//       this.styles = { cursor: "pointer" };
+//     });
+//     this.addEventListener("mouseout", () => {
+//       this.styles = { cursor: "auto" };
+//     });
+//     this.addEventListener("click", () => {
+//       this.styles = { display: "none" };
+//       console.log("app set to levels");
+//       app.set("room", "levels");
+//     });
+//   }
+// }
+
+// class LevelScreen extends SvgPlus {
+//   constructor(app, isSender) {
+//     super("div");
+
+//     this.app = app;
+//     this.isSender = isSender;
+//     this.props = { id: "level-screen" };
+//     this.styles = {
+//       width: "100%",
+//       height: "100%",
+//       "margin-top": "15%",
+//       overflow: "scroll",
+//     };
+
+//     this.gamesDiv = this.createChild("div", {
+//       styles: {
+//         display: "grid",
+//         "grid-template-columns": "repeat(3, 1fr)",
+//         gap: "50px",
+//         "justify-content": "center",
+//         "margin-left": "10em",
+//         "margin-right": "10em",
+//       },
+//     });
+
+//     this.createImage("http://127.0.0.1:5502/images/standard.svg", "Standard");
+//     this.createImage("http://127.0.0.1:5502/images/birthday.svg", "Birthday");
+//     this.createImage("http://127.0.0.1:5502/images/halloween.svg", "Halloween");
+//     this.createImage("http://127.0.0.1:5502/images/christmas.svg", "Christmas");
+
+//     window.addEventListener("resize", () => {
+//       this.updateGridStyles();
+//     });
+//   }
+
+//   // create the div for each theme with the image and name
+//   createImage(path, game) {
+//     let imageDiv = this.gamesDiv.createChild("div");
+//     let image = imageDiv.createChild("img", {
+//       src: path,
+//       styles: {
+//         width: "100%",
+//         height: "auto",
+//         border: "solid 8px #466596",
+//       },
+//     });
+
+//     if (this.isSender) {
+//       image.addEventListener("click", () => {
+//         this.app.set("room", "game");
+//         this.app.set("level", game);
+//         // this.app.set("itemsOnScreen", itemPositions[game]);
+//         this.app.set("state", "reset");
+//         // this.app.set("prompt", "");
+//       });
+
+//       image.addEventListener("mouseover", () => {
+//         image.styles = { cursor: "pointer" };
+//       });
+//       image.addEventListener("mouseout", () => {
+//         image.styles = { cursor: "auto" };
+//       });
+//     }
+
+//     let name = imageDiv.createChild("p", {
+//       styles: {
+//         "font-family": "Arial, sans-serif",
+//         "font-size": "32px",
+//         "font-weight": "bold",
+//         "text-align": "center",
+//         "margin-top": "20px",
+//         "margin-bottom": "0",
+//       },
+//     });
+//     name.textContent = game;
+//   }
+
+//   // Make grid scale with screen size
+//   updateGridStyles() {
+//     let columns;
+//     const screenWidth = window.innerWidth;
+
+//     if (screenWidth > 1650) {
+//       document.getElementById("level-screen").style.marginTop = "15%";
+//       columns = "repeat(3, 1fr)";
+//     } else if (screenWidth > 1090 && screenWidth <= 1650) {
+//       document.getElementById("level-screen").style.marginTop = "20%";
+//       columns = "repeat(2, 1fr)";
+//     } else {
+//       document.getElementById("level-screen").style.marginTop = "25%";
+//       columns = "repeat(1, 1fr)";
+//     }
+//     this.gamesDiv.style.gridTemplateColumns = columns;
+//   }
+// }
+
 class MainWindow extends SvgPlus {
   constructor(isSender, app) {
     super("div");
-
-    let effect = this.createChild("audio", {
-      src: "http://127.0.0.1:5502/sounds/effect.mp3",
-    });
     
     this.app = app;
     this.isSender = isSender;
-    this.effect = effect;
-    // this.props = { id: "main-window" };
+
     this.styles = {
       position: "absolute",
       display: "flex",
-      "justify-content": "center",
-      "align-items": "center",
       width: "100%",
-      height: "100%",
-      top: "50%",
-      left: "50%",
-      transform: "translate(-50%, -50%)",
+      height: "100%"
     };
 
-    // this.createChild(EyePaint, {}, [this.editable, this.app]);
-    // add eyepaint game to the main window
-    // this.createChild(EyePaint, {}, [this.isSender, this.app]);
-    // i want to instatiate the eyepaint game here
-    let eyepaint = new EyePaint(this.isSender, this.app, this.effect);
-    let eyepaintDiv = this.createChild("div");
-    eyepaintDiv.appendChild(eyepaint);
-    console.log("eyepaint", eyepaint);
-
+    let eyepaint = new EyePaint(this.isSender, this.app);
+    this.appendChild(eyepaint);
   }
 }
 
-class VolumeButton extends SvgPlus {
-  constructor(app) {
-    super("img");
-    this.app = app;
-
-    this.styles = {
-      position: "relative",
-      width: "64px",
-      height: "64px",
-      "margin-bottom": "10px",
-    };
-
-    this.addEventListener("click", async () => {
-      if (await this.getMuted()) {
-        app.set("muted", false);
-      } else {
-        app.set("muted", true);
-      }
-    });
-
-    this.addEventListener("mouseover", () => {
-      this.styles = { cursor: "pointer" };
-    });
-    this.addEventListener("mouseout", () => {
-      this.styles = { cursor: "auto" };
-    });
-  }
-
-  async getMuted() {
-    let isMuted = await this.app.get("muted");
-    return isMuted;
-  }
-}
-
-class HomeButton extends SvgPlus {
-  constructor(app) {
-    super("img");
-
-    this.props = { src: "http://127.0.0.1:5502/images/home.svg" };
-    this.styles = {
-      position: "relative",
-      width: "64px",
-      height: "64px",
-      "margin-bottom": "10px",
-      "margin-right": "10px",
-    };
-
-    this.addEventListener("mouseover", () => {
-      this.styles = { cursor: "pointer" };
-    });
-    this.addEventListener("mouseout", () => {
-      this.styles = { cursor: "auto" };
-    });
-    this.addEventListener("click", () => {
-      app.set("room", "home");
-    });
-  }
-}
-
-class BackButton extends SvgPlus {
-  constructor(app) {
-    super("img");
-
-    this.props = { src: "http://127.0.0.1:5502/images/back.svg" };
-    this.styles = {
-      position: "relative",
-      width: "64px",
-      height: "64px",
-      "margin-bottom": "10px",
-      "margin-right": "10px",
-    };
-
-    this.addEventListener("mouseover", () => {
-      this.styles = { cursor: "pointer" };
-    });
-    this.addEventListener("mouseout", () => {
-      this.styles = { cursor: "auto" };
-    });
-    this.addEventListener("click", () => {
-      this.styles = { display: "none" };
-      console.log("app set to levels");
-      app.set("room", "levels");
-    });
-  }
-}
-
-class LevelScreen extends SvgPlus {
-  constructor(app, isSender) {
-    super("div");
-
-    this.app = app;
-    this.isSender = isSender;
-    this.props = { id: "level-screen" };
-    this.styles = {
-      width: "100%",
-      height: "100%",
-      "margin-top": "15%",
-      overflow: "scroll",
-    };
-
-    this.gamesDiv = this.createChild("div", {
-      styles: {
-        display: "grid",
-        "grid-template-columns": "repeat(3, 1fr)",
-        gap: "50px",
-        "justify-content": "center",
-        "margin-left": "10em",
-        "margin-right": "10em",
-      },
-    });
-
-    this.createImage("http://127.0.0.1:5502/images/standard.svg", "Standard");
-    this.createImage("http://127.0.0.1:5502/images/birthday.svg", "Birthday");
-    this.createImage("http://127.0.0.1:5502/images/halloween.svg", "Halloween");
-    this.createImage("http://127.0.0.1:5502/images/christmas.svg", "Christmas");
-
-    window.addEventListener("resize", () => {
-      this.updateGridStyles();
-    });
-  }
-
-  // create the div for each theme with the image and name
-  createImage(path, game) {
-    let imageDiv = this.gamesDiv.createChild("div");
-    let image = imageDiv.createChild("img", {
-      src: path,
-      styles: {
-        width: "100%",
-        height: "auto",
-        border: "solid 8px #466596",
-      },
-    });
-
-    if (this.isSender) {
-      image.addEventListener("click", () => {
-        this.app.set("room", "game");
-        this.app.set("level", game);
-        // this.app.set("itemsOnScreen", itemPositions[game]);
-        this.app.set("state", "reset");
-        // this.app.set("prompt", "");
-      });
-
-      image.addEventListener("mouseover", () => {
-        image.styles = { cursor: "pointer" };
-      });
-      image.addEventListener("mouseout", () => {
-        image.styles = { cursor: "auto" };
-      });
-    }
-
-    let name = imageDiv.createChild("p", {
-      styles: {
-        "font-family": "Arial, sans-serif",
-        "font-size": "32px",
-        "font-weight": "bold",
-        "text-align": "center",
-        "margin-top": "20px",
-        "margin-bottom": "0",
-      },
-    });
-    name.textContent = game;
-  }
-
-  // Make grid scale with screen size
-  updateGridStyles() {
-    let columns;
-    const screenWidth = window.innerWidth;
-
-    if (screenWidth > 1650) {
-      document.getElementById("level-screen").style.marginTop = "15%";
-      columns = "repeat(3, 1fr)";
-    } else if (screenWidth > 1090 && screenWidth <= 1650) {
-      document.getElementById("level-screen").style.marginTop = "20%";
-      columns = "repeat(2, 1fr)";
-    } else {
-      document.getElementById("level-screen").style.marginTop = "25%";
-      columns = "repeat(1, 1fr)";
-    }
-    this.gamesDiv.style.gridTemplateColumns = columns;
-  }
-}
-
-export default class TestApp extends SquidlyApp {
+export default class GameApp extends SquidlyApp {
   constructor(isSender, initializer) {
     super(isSender, initializer);
 
