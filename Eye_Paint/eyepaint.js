@@ -80,13 +80,18 @@ class EyePaint extends SvgPlus {
     this.editable = editable;
 
     this.selectedColour = null;
-    this.displayContent = this.createChild("div");
+    this.displayContent = this.createChild("div", {
+      styles: {
+        border: "10px solid white",
+        margin: "1em"
+      }
+    });
 
     this.styles = {
       height: "100%",
       width: "100%",
       display: "grid",
-      "grid-template-columns": "20% 5% 1fr 10%",
+      "grid-template-columns": "20% 5% 1fr 20%",
       "background-image": "url('http://127.0.0.1:5502/images/EyePaint/background.jfif')",
       "background-size": "cover",
       "background-position": "center",
@@ -97,6 +102,7 @@ class EyePaint extends SvgPlus {
     this.props = {
       id: "eyePaint"
     };
+
     // this.app.onValue("selectedImage", (selectedImage) => {
     //   this.selectedImage = selectedImage;
     // });
@@ -122,7 +128,6 @@ class EyePaint extends SvgPlus {
         break;
       case "paint":
         this.paintImage(this.selectedImage);
-        // this.paintImage("dog");
         break;
     }
   }
@@ -154,8 +159,11 @@ class EyePaint extends SvgPlus {
 
     const svgContent = svgAssets[selectedImage];
     const svgElement = SvgPlus.parseSVGString(svgContent);
-    svgElement.style.width = "80%";
-    svgElement.style.height = "80%";
+    svgElement.style.width = "90%";
+    svgElement.style.height = "100%";
+    svgElement.style.display = "block"; // Center the SVG, by default element is inline
+    svgElement.style.margin = "auto";
+ 
     this.displayContent.appendChild(svgElement);
     
     // Reset all colors to white
@@ -166,8 +174,23 @@ class EyePaint extends SvgPlus {
 
     // Add colour palette
     const colourPicker = this.addColourButtons();
+    const controls = this.addControlButtons();
     // Swap colourPicker with the SVG so that colourPicker is on the left
     this.insertBefore(colourPicker, this.displayContent);
+    this.insertBefore(controls, this.displayContent);
+
+    this.contentRight = this.createChild("div", {
+      styles: {
+        display: "flex"
+      },
+    });
+    this.reference = this.contentRight.createChild("img", {
+      src: `http://127.0.0.1:5502/images/eyepaint/dog.svg`,
+      styles: {
+        "align-self": "end",
+        margin: "0 auto"
+      }
+    });
   }
 
   shadeColour(colour, percent) {
@@ -189,7 +212,9 @@ class EyePaint extends SvgPlus {
       styles: {
         display: "flex",
         "flex-wrap": "wrap",
-        "justify-content": "center",
+        "justify-content": "end",
+        "align-items": "center",
+        "align-content": "flex-start"
       },
     });
 
@@ -208,6 +233,7 @@ class EyePaint extends SvgPlus {
           transition: "transform 0.2s",
         },
       });
+
       button.addEventListener("click", () => {
         this.selectedColour = colour;
       });
@@ -219,17 +245,24 @@ class EyePaint extends SvgPlus {
       };
     });
 
-    // this.addControlButtons(colourPicker);
     return colourPicker;
   }
 
-  addControlButtons(colourPicker) {
-    const eraser = colourPicker.createChild("img", {
+  addControlButtons() {
+    const controls = this.createChild("div", {
+      styles: {
+        display: "flex",
+        "flex-wrap": "wrap",
+        "align-content": "flex-start"
+      },
+    });
+
+    const eraser = controls.createChild("img", {
       src: "http://127.0.0.1:5502/images/EyePaint/eraser.svg",
       class: "controls",
       styles: {
-        width: "100px",
-        height: "100px",
+        width: "90%",
+        height: "10%",
         margin: "5px",
         cursor: "pointer",
       },
@@ -237,19 +270,19 @@ class EyePaint extends SvgPlus {
 
     eraser.onclick = () => {
       this.selectedColour = "white";
-      eraser.props = {
-        src: this.selectedColour === "white"
-          ? "http://127.0.0.1:5502/images/EyePaint/eraser-select.svg"
-          : "http://127.0.0.1:5502/images/EyePaint/eraser-unselect.svg"
-      };
+      // eraser.props = {
+      //   src: this.selectedColour === "white"
+      //     ? "http://127.0.0.1:5502/images/EyePaint/eraser-select.svg"
+      //     : "http://127.0.0.1:5502/images/EyePaint/eraser-unselect.svg"
+      // };
     };
 
-    const resetButton = colourPicker.createChild("img", {
+    const resetButton = controls.createChild("img", {
       src: "http://127.0.0.1:5502/images/EyePaint/reset.svg",
       class: "controls",
       styles: {
-        width: "100px",
-        height: "100px",
+        width: "90%",
+        height: "10%",
         margin: "5px",
         cursor: "pointer",
       },
@@ -258,6 +291,8 @@ class EyePaint extends SvgPlus {
     resetButton.onclick = () => {
       this.resetColours();
     };
+
+    return controls;
   }
 
   setupSVGInteraction(svgElement) {
