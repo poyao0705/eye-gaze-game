@@ -86,7 +86,7 @@ class EyePaint extends SvgPlus {
       height: "100%",
       width: "100%",
       display: "grid",
-      "grid-template-columns": "20% 1fr 10%",
+      "grid-template-columns": "20% 5% 1fr 10%",
       "background-image": "url('http://127.0.0.1:5502/images/EyePaint/background.jfif')",
       "background-size": "cover",
       "background-position": "center",
@@ -196,13 +196,13 @@ class EyePaint extends SvgPlus {
     colours.forEach((colour) => {
       const button = colourPicker.createChild("button", {
         styles: {
-          width: "40%",   
-          height: "auto",
+          width: "35%",   
+          height: "13%",
           "padding-left": "2em",
           "padding-right": "2em",   
           "border-radius": "50%", 
-          background: `linear-gradient(225deg, ${colour} 70%, ${this.shadeColour(colour, 0.7)} 100%)`,
-          border: "2px solid #ccc",
+          background: `linear-gradient(225deg, ${colour} 40%, ${this.shadeColour(colour, 0.7)} 100%)`,
+          border: "6px solid white",
           margin: "1em",
           cursor: "pointer",
           transition: "transform 0.2s",
@@ -212,24 +212,24 @@ class EyePaint extends SvgPlus {
         this.selectedColour = colour;
       });
       button.onmouseover = () => {
-        button.styles = { transform: "scale(1.1)" };
+        button.styles = { transform: "scale(1.15)" };
       };
       button.onmouseout = () => {
         button.styles = { transform: "scale(1)" };
       };
     });
 
-    this.addControlButtons(colourPicker);
+    // this.addControlButtons(colourPicker);
     return colourPicker;
   }
 
   addControlButtons(colourPicker) {
     const eraser = colourPicker.createChild("img", {
-      src: "http://127.0.0.1:5502/images/EyePaint/eraser-unselect.svg",
+      src: "http://127.0.0.1:5502/images/EyePaint/eraser.svg",
       class: "controls",
       styles: {
-        width: "50px",
-        height: "50px",
+        width: "100px",
+        height: "100px",
         margin: "5px",
         cursor: "pointer",
       },
@@ -248,8 +248,8 @@ class EyePaint extends SvgPlus {
       src: "http://127.0.0.1:5502/images/EyePaint/reset.svg",
       class: "controls",
       styles: {
-        width: "50px",
-        height: "50px",
+        width: "100px",
+        height: "100px",
         margin: "5px",
         cursor: "pointer",
       },
