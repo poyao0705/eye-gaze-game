@@ -117,8 +117,8 @@ class EyePaint extends SvgPlus {
       // this.applyColourUpdates(updates);
       this.applyColourUpdate(update);
     });
-    this.State = ["load", null];
-    // this.State = "paint";
+    // this.State = ["load", null];
+    this.State = ["paint", "dog"];
   }
 
   set State(params) {
@@ -160,12 +160,13 @@ class EyePaint extends SvgPlus {
     this.displayContent.innerHTML = "";
 
     const svgContent = svgAssets[selectedImage];
+    console.log(svgContent);
     const svgElement = SvgPlus.parseSVGString(svgContent);
-    svgElement.style.width = "90%";
-    svgElement.style.height = "100%";
-    svgElement.style.display = "block"; // Center the SVG, by default element is inline
-    svgElement.style.margin = "auto";
- 
+    
+    // Set a fixed size for the SVG container
+    svgElement.style.width = "500px";
+    svgElement.style.height = "500px";
+    
     this.displayContent.appendChild(svgElement);
     
     // Reset all colors to white
