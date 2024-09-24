@@ -1,8 +1,4 @@
 Todo
-- The SVG xml is hard-coded in the variable 'svgString'; need to find a way to get this data automatically.
-
-- Screen to select different images.
-
 - Remove hard-coded pixel values so it'sto different screen sizes (mostly done)
 
 - Music/sound effects.
@@ -11,10 +7,8 @@ Todo
 
 - Reset button functionality
 
-- Back button functionality
+- How to run multiple apps
 
-- Make colour palette fit in more by adding an image
-
-- How to run multiple apps, screenshot functionality 
+- Change logo to "EyePaint", original is a bit blurry
 
 

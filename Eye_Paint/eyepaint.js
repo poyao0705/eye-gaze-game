@@ -16,9 +16,9 @@ async function loadSVGs(images) {
   return svglib;
 }
 
-const images = ["dog", "cat", "horse", "parrot", "pig"];
+const images = ["dog", "cat", "horse", "parrot", "pig", "rabbit", "sheep", "turtle"];
 const svgAssets = await loadSVGs(images);
-console.log(svgAssets);
+// console.log(svgAssets);
 
 const displayContentDefaultStyle = {
   id: "displayContent",
@@ -53,9 +53,6 @@ class EyePaint extends SvgPlus {
     this.editable = editable;
 
     this.selectedColour = null;
-    // this.selectedButton = null;
-
-    
 
     // Main container styles
     this.styles = {
@@ -63,49 +60,33 @@ class EyePaint extends SvgPlus {
       width: "100%",
       position: "relative",
       display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
+      // justifyContent: "center",
+      // alignItems: "center",
       "background-image": "url('http://127.0.0.1:5502/images/EyePaint/background.jfif')",
       "background-size": "cover",
       "background-position": "center",
       "background-repeat": "repeat",
-      overflow: "hidden",
+      // overflow: "hidden",
     };
 
     this.props = {
       id: "eyePaint"
     };
 
-    // Create a single container for both image selection and painting
-    // this.contentContainer = this.createChild("div", contentContainerDefaultStyle);
-
-    // Create displayContent inside contentContainer
-    // this.displayContent = this.contentContainer.createChild("div", displayContentDefaultStyle);
     // Create separate divs for each page
     this.initPage = this.createChild("div", { id: "initPage", styles: { display: "none" } });
     this.loadPage = this.createChild("div", { id: "loadPage", styles: { display: "none" } });
     this.paintPage = this.createChild("div", { id: "paintPage", styles: { display: "none" } });
-
-    
 
     this.app.onValue("state", (stateObj) => {
       this.State = stateObj;
     });
 
     this.app.onValue("colorUpdates", (update) => {
-      // this.applyColourUpdates(updates);
       this.applyColourUpdate(update);
     });
 
     this.app.set("state", { page: "init", selectedImage: null, pageNumber: null });
-
-    // this.State = { page: "init", selectedImage: null, pageNumber: null };
-
-    // this.State = ["init", null];
-    // this.State = ["load", null];
-    // this.State = ["paint", "dog"];
-
-    // this.app.set("state", ["init", null]);
   }
 
   set State(stateObj) {
@@ -137,43 +118,37 @@ class EyePaint extends SvgPlus {
     this.hideAllPages();
     this.initPage.innerHTML = "";
     this.initPage.style.display = "block";
-    console.log("init page");
-    // load image logo from images/eyepaint/example_eyepaint_logo.jpg
-    // make it so that the logo is centered set to fixed size: 500px by 500px
-    // center in the middle of the page
+    // console.log("init page");
+
+    // Center logo in the middle of the page
     const logo = this.initPage.createChild("img", {
-      src: "http://127.0.0.1:5502/images/eyepaint/example_eyepaint_logo.jpg",
-      // make it so that the logo is centered
+      src: "http://127.0.0.1:5502/images/eyepaint/main_page.jfif",
       styles: {
         position: "absolute",
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        width: "45%",
+        width: "48%",
         height: "75%",
-        objectFit: "contain",
-        marginBottom: "1em",
-        borderRadius: "10px",
-        border: "20px solid white",
+        "border-radius": "2%",
+        border: "0.8em solid white",
       },
     });
 
-    // create a button that says "Start"
-    // put the button below the logo
+    // Start button under the logo
     const startButton = this.initPage.createChild("button", {
       innerHTML: "Start",
       id: "startButton",
-      // put the button center and below the logo
       styles: {
         position: "absolute",
         bottom: "10%",
         left: "50%",
         transform: "translateX(-50%)",
-        "background-color": "orange",
-        "border": "2px solid white",
+        "background-color": "#ebb434",
+        "border": "3px solid white",
         "border-radius": "5px",
         "color": "black",
-        "padding": "10px 20px",
+        "padding": "12px 20px",
         "font-size": "16px",
         "font-weight": "bold",
         "cursor": "pointer",
