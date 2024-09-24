@@ -27,14 +27,11 @@ const displayContentDefaultStyle = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   display: "grid",
-  gap: "20px",
-  width: "60%",
-  height: "60%",
-  aspectRatio: "1 / 1",
-  backgroundColor: "rgba(255, 255, 255, 0.9)",
-  borderRadius: "10px",
-  padding: "20px",
-  boxSizing: "border-box",
+  gap: "1em 2em",
+  width: "80%",
+  height: "80%",
+  "aspect-ratio": "1 / 1",
+  // "box-sizing": "border-box"
 };
 
 const colours1 = [
@@ -168,8 +165,8 @@ class EyePaint extends SvgPlus {
         position: "absolute",
         top: "50%",
         [position]: "0",
-        "background-color": "orange",
-        "border": "2px solid white",
+        "background-color": "#ebb434",
+        "border": "3px solid white",
         "border-radius": "5px",
         "color": "black",
         "padding": "10px 20px",
@@ -185,7 +182,6 @@ class EyePaint extends SvgPlus {
     this.hideAllPages();
     this.loadPage.style.display = "block";
     this.loadPage.innerHTML = "";
-    
   
     // Update loadPage styles
     this.loadPage.styles = displayContentDefaultStyle;
@@ -199,7 +195,8 @@ class EyePaint extends SvgPlus {
     let endPage = Math.ceil(images.length / 4);
     let imagesToShow = images.slice(startIndex, endIndex);
     console.log(imagesToShow);
-    // create next button and previous button
+
+    // Create next button and previous button
     if (this.editable) {
       const nextButton = this.createPaginationButtons("&#9654;", "nextButton", "right");
       nextButton.addEventListener("click", () => {
@@ -223,8 +220,6 @@ class EyePaint extends SvgPlus {
         id: "imageOption",
         styles: {
           display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
           width: "100%",
           height: "100%",
           cursor: "pointer",
@@ -236,10 +231,10 @@ class EyePaint extends SvgPlus {
       let img = imageOption.createChild("img", {
         src: `http://127.0.0.1:5502/images/eyepaint/${image}.svg`,
         styles: {
-          width: "40%",
-          height: "40%",
+          width: "50%",
+          height: "auto",
           margin: "auto",
-          objectFit: "contain",
+          "object-fit": "contain",
         },
       });
       if (this.editable) {
@@ -587,14 +582,6 @@ class EyePaint extends SvgPlus {
         console.warn(`Element with id ${id} not found`);
       }
     }
-    
-    // const element = this.displayContent.querySelector(`#${update.id}`);
-    // if (element) {
-    //   element.style.fill = update.color;
-    //   console.log(`Applied color ${update.color} to element with id ${update.id}`);
-    // } else {
-    //   console.warn(`Element with id ${update.id} not found`);
-    // }
   }
 
   resetColours() {
