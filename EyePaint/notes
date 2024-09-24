@@ -1,14 +1,10 @@
 Todo
-- Remove hard-coded pixel values so it'sto different screen sizes (mostly done)
-
 - Music/sound effects.
 
 - Background sometimes doesn't cover the whole page (I think issue is on clinician side)
-
-- Reset button functionality
 
 - How to run multiple apps
 
 - Change logo to "EyePaint", original is a bit blurry
 
-
+- SVG fixed doesn't really work, outline and painting doesn't work properly for all the new ones

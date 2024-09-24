@@ -68,6 +68,14 @@ class EyePaint extends SvgPlus {
       id: "eyePaint"
     };
 
+    this.music = this.createChild("audio", {
+      src: "http://127.0.0.1:5502/sounds/EyePaint/music_menu.ogg"
+    });
+    // this.music.volume = 0.5;
+    // this.music.loop = true;
+    // this.music.load();
+    // this.music.play();
+
     // Create separate divs for each page
     this.initPage = this.createChild("div", { id: "initPage", styles: { display: "none" } });
     this.loadPage = this.createChild("div", { id: "loadPage", styles: { display: "none" } });
@@ -81,6 +89,29 @@ class EyePaint extends SvgPlus {
       this.applyColourUpdate(update);
     });
 
+    this.app.onValue("muted", (value) => {
+      console.log("muted", value);
+      if (value) {
+        // Mute logic
+        if (this.volumeButton) {
+          this.volumeButton.props = {
+            src: "http://127.0.0.1:5502/images/volume-mute.svg",
+          };
+        }
+        this.music.muted = true;
+      } else {
+        // Unmute logic
+        if (this.volumeButton) {
+          this.volumeButton.props = {
+            src: "http://127.0.0.1:5502/images/volume.svg",
+          };
+        }
+        this.music.muted = false;
+        this.music.play();
+      }
+    });
+
+    this.app.set("muted", true);
     this.app.set("state", { page: "init", selectedImage: null, pageNumber: null });
   }
 
@@ -109,11 +140,49 @@ class EyePaint extends SvgPlus {
     this.paintPage.style.display = "none";
   }
 
+  async createVolumeButton(app, page) {
+    // let src;
+    // if (await this.getMuted()) {
+    //   src = "http://127.0.0.1:5502/images/EyePaint/volume-mute.svg";
+    // } else {
+    //   src = "http://127.0.0.1:5502/images/EyePaint/volume.svg";
+    // }
+    
+    // this.volumeButton = null;
+    this.volumeButton = page.createChild("img", {
+      id: "volume",
+      src: "http://127.0.0.1:5502/images/EyePaint/volume-mute.svg",
+      styles: {
+        position: "absolute",
+        top: "0",
+        right: "0",
+        width: "6.5%",
+        height: "11%",
+        margin: "5px 5px 0 0",
+        cursor: "pointer"
+      },
+    });
+
+    this.volumeButton.addEventListener("click", async () => {
+      if (await this.getMuted()) {
+        app.set("muted", false);
+      } else {
+        app.set("muted", true);
+      }
+    });
+  }
+
+  async getMuted() {
+    let isMuted = await this.app.get("muted");
+    return isMuted;
+  }
+
   init() {
     this.hideAllPages();
     this.initPage.innerHTML = "";
     this.initPage.style.display = "block";
     // console.log("init page");
+    this.createVolumeButton(this.app, this.initPage);
 
     // Center logo in the middle of the page
     const logo = this.initPage.createChild("img", {
@@ -177,9 +246,15 @@ class EyePaint extends SvgPlus {
   }
 
   loadImageOptions() {
+    if (this.music.src !== "http://127.0.0.1:5502/sounds/EyePaint/music_game.ogg") {
+      this.music.src = "http://127.0.0.1:5502/sounds/EyePaint/music_game.ogg";
+      this.music.play();
+    }
+ 
     this.hideAllPages();
     this.loadPage.style.display = "block";
     this.loadPage.innerHTML = "";
+    this.createVolumeButton(this.app, this);
   
     // Update loadPage styles
     this.loadPage.styles = displayContentDefaultStyle;
@@ -256,6 +331,9 @@ class EyePaint extends SvgPlus {
     this.hideAllPages();
     this.paintPage.style.display = "block";
     this.paintPage.innerHTML = "";
+    if (this.volumeButton) {
+      this.volumeButton = null;
+    }
  
     this.paintPage.styles = {
       height: "100%",
@@ -292,6 +370,7 @@ class EyePaint extends SvgPlus {
       element.style.fill = "white";
     });
     this.setupSVGInteraction(svgElement);
+    console.log(svgElement);
 
     // Create a container for the right column content
     this.contentRight = this.paintPage.createChild("div", {
@@ -305,7 +384,7 @@ class EyePaint extends SvgPlus {
 
     const camera = this.contentRight.createChild("img", {
       id: "camera",
-      src: "http://127.0.0.1:5502/images/EyePaint/camera.svg",
+      src: "http://127.0.0.1:5502/images/EyePaint/volume-mute.svg",
       styles: {
         width: "31.5%",
         height: "11%",
@@ -544,7 +623,7 @@ class EyePaint extends SvgPlus {
   resetColours() {
     this.paintPage.querySelectorAll("path:not([fixed]), g:not([fixed]), circle:not([fixed]), rect:not([fixed])").forEach((element, index) => {
       const elementId = `${this.selectedImage}-element-${index}`;
-      const update = { id: elementId, color: "white" };
+      const update = { [elementId]: "white" };
       this.applyColourUpdate(update);
       this.app.set("colorUpdates", update);
     });
