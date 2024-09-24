@@ -57,8 +57,6 @@ class EyePaint extends SvgPlus {
       width: "100%",
       position: "relative",
       display: "flex",
-      // justifyContent: "center",
-      // alignItems: "center",
       "background-image": "url('http://127.0.0.1:5502/images/EyePaint/background.jfif')",
       "background-size": "cover",
       "background-position": "center",
@@ -199,6 +197,7 @@ class EyePaint extends SvgPlus {
     // Create next button and previous button
     if (this.editable) {
       const nextButton = this.createPaginationButtons("&#9654;", "nextButton", "right");
+      this.addButtonAnimation(nextButton);
       nextButton.addEventListener("click", () => {
         if (!(this.pageNumber + 1 > endPage)) {
           this.app.set("state", { page: "load", selectedImage: null, pageNumber: this.pageNumber + 1 });
@@ -207,6 +206,7 @@ class EyePaint extends SvgPlus {
       });
 
       const previousButton = this.createPaginationButtons("&#9664;", "previousButton", "left");
+      this.addButtonAnimation(previousButton);
       previousButton.addEventListener("click", () => {
         if (!(this.pageNumber - 1 < 1)) {
           this.app.set("state", { page: "load", selectedImage: null, pageNumber: this.pageNumber - 1 });
@@ -256,89 +256,54 @@ class EyePaint extends SvgPlus {
     this.hideAllPages();
     this.paintPage.style.display = "block";
     this.paintPage.innerHTML = "";
-    // this.contentContainer.style.gridTemplateColumns = "20% 5% 1fr 20%"; // Restore original grid
+ 
     this.paintPage.styles = {
-      position: "absolute",
-      top: 0,
-      left: 0,
-      width: "100%",
       height: "100%",
+      width: "100%",
       display: "grid",
+      "grid-template-columns": "20% 7% 1fr 20%"
     };
-    this.paintPage.style.gridTemplateColumns = "20% 5% 1fr 20%";
-    this.paintPage.style.gridTemplateRows = "1fr";
-    // Update displayContent styles to center its content
-    this.paintPage.styles = {
-      gridColumn: "3",
-      gridRow: "1",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      border: "10px solid white",
-      margin: "1em",
-      padding: "2em", // Add padding to give more space around the image
-      boxSizing: "border-box", // Ensure padding is included in the element's total width and height
-      overflow: "hidden",
-    };
+    
 
+    // Add colour palette and control buttons
+    const colourPicker = this.addColourButtons();
+    const controls = this.addControlButtons();
+    this.paintPage.appendChild(colourPicker);
+    this.paintPage.appendChild(controls);
+    
+    this.canvas = this.createChild("div", {
+      styles: {
+        border: "10px solid white",
+        margin: "1em"
+      }
+    });
+    // Add in SVG to paint on
     const svgContent = svgAssets[selectedImage];
-    console.log(svgContent);
     const svgElement = SvgPlus.parseSVGString(svgContent);
-    
-    // Set a fixed size for the SVG container
-    svgElement.style.width = "100%";
+    svgElement.style.width = "90%";
     svgElement.style.height = "100%";
-    svgElement.style.maxWidth = "500px"; 
-    svgElement.style.maxHeight = "500px";
-    svgElement.style.objectFit = "contain"
-    
-    this.paintPage.appendChild(svgElement);
-    
+    svgElement.style.display = "block"; // Center the SVG, by default element is inline
+    svgElement.style.margin = "auto";
+    this.canvas.appendChild(svgElement);
+    this.paintPage.appendChild(this.canvas);
+
     // Reset all colors to white
     svgElement.querySelectorAll("path:not([fixed]), g:not([fixed]), circle:not([fixed]), rect:not([fixed])").forEach((element) => {
       element.style.fill = "white";
     });
     this.setupSVGInteraction(svgElement);
 
-    // Add colour palette
-    const colourPicker = this.addColourButtons();
-    const controls = this.addControlButtons();
-    // Swap colourPicker with the SVG so that colourPicker is on the left
-    this.paintPage.insertBefore(colourPicker, this.displayContent);
-    this.paintPage.insertBefore(controls, this.displayContent);
-
     // Create a container for the right column content
     this.contentRight = this.paintPage.createChild("div", {
       id: "contentRight",
       styles: {
-        gridColumn: "4",
-        gridRow: "1",
         display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        alignItems: "flex-end",
-        // padding: "1em",
-        position: "absolute", // Add this to make it a positioning context
-        // bottom right corner
-        // make sure button is not covered
-        bottom: "0",
-        right: "0",
-        height: "100%", // Ensure it takes full height of its grid cell
-        width: "20%",
-      },
-    });
-      // Create a container for the top buttons (camera and back)
-    const topButtons = this.contentRight.createChild("div", {
-      id: "topButtons",
-      styles: {
-        display: "flex",
-        justifyContent: "flex-end",
-        width: "100%",
+        "flex-wrap": "wrap",
+        "justify-content": "end"
       },
     });
 
-    // Add camera button
-    const camera = topButtons.createChild("img", {
+    const camera = this.contentRight.createChild("img", {
       id: "camera",
       src: "http://127.0.0.1:5502/images/EyePaint/camera.svg",
       styles: {
@@ -349,8 +314,7 @@ class EyePaint extends SvgPlus {
       },
     });
 
-    // Add back button
-    const back = topButtons.createChild("img", {
+    const back = this.contentRight.createChild("img", {
       id: "back",
       src: "http://127.0.0.1:5502/images/EyePaint/back.svg",
       styles: {
@@ -365,22 +329,15 @@ class EyePaint extends SvgPlus {
     this.addButtonAnimation(camera);
 
     back.addEventListener("click", () => {
-      // set it to page 1
       this.app.set("state", { page: "load", selectedImage: null, pageNumber: 1 });
       this.loadImageOptions();
     });
 
-    // Add reference image at the bottom
     this.reference = this.contentRight.createChild("img", {
       src: `http://127.0.0.1:5502/images/eyepaint/${selectedImage}.svg`,
       styles: {
-        position: "absolute", // Position it absolutely within contentRight
-        bottom: "3em", // Distance from the bottom
-        right: "3em", // Distance from the right
-        width: "80%", // Width relative to contentRight
-        maxHeight: "50%", // Maximum height
-        objectFit: "contain", // Maintain aspect ratio
-        zIndex: "1", // Ensure it is below the drawing image
+        "align-self": "end",
+        margin: "0 auto"
       }
     });
   }
@@ -414,6 +371,45 @@ class EyePaint extends SvgPlus {
     const BB = ((B.toString(16).length === 1) ? "0" + B.toString(16) : B.toString(16));
   
     return "#" + RR + GG + BB;
+  };
+
+  createButton(colour, colourPicker) {
+    const button = colourPicker.createChild("button", {
+      styles: {
+        width: "88%",   
+        height: "15%",
+        "padding-left": "2em",
+        "padding-right": "2em",   
+        "border-radius": "50%", 
+        background: `linear-gradient(225deg, ${colour} 40%, ${this.shadeColour(colour, 0.7)} 100%)`,
+        border: "6px solid white",
+        margin: "1em 0em",
+        cursor: "pointer",
+        transition: "transform 0.2s",
+      },
+    });
+
+    button.addEventListener("click", () => {
+      this.selectedColour = colour;
+    });
+    button.onmouseover = () => {
+      button.styles = { transform: "scale(1.1)" };
+    };
+    button.onmouseout = () => {
+      button.styles = { transform: "scale(1)" };
+    };
+    // Creates a border when the button is clicked on and removes it when it is not
+    button.onfocus = () => {
+      button.styles = { 
+          outline: "none",
+          "box-shadow": "0 0 0 3px rgba(66, 153, 225, 0.5)"
+      }
+    };
+    button.onblur = () => {
+        button.styles = { "box-shadow": "none" };
+    };
+
+    return button;
   };
 
   addColourButtons() {
@@ -460,45 +456,6 @@ class EyePaint extends SvgPlus {
 
     return background;
   }
-
-  createButton(colour, colourPicker) {
-    const button = colourPicker.createChild("button", {
-      styles: {
-        width: "88%",   
-        height: "15%",
-        "padding-left": "2em",
-        "padding-right": "2em",   
-        "border-radius": "50%", 
-        background: `linear-gradient(225deg, ${colour} 40%, ${this.shadeColour(colour, 0.7)} 100%)`,
-        border: "6px solid white",
-        margin: "1em 0em",
-        cursor: "pointer",
-        transition: "transform 0.2s",
-      },
-    });
-
-    button.addEventListener("click", () => {
-      this.selectedColour = colour;
-    });
-    button.onmouseover = () => {
-      button.styles = { transform: "scale(1.1)" };
-    };
-    button.onmouseout = () => {
-      button.styles = { transform: "scale(1)" };
-    };
-    // Creates a border when the button is clicked on and removes it when it is not
-    button.onfocus = () => {
-      button.styles = { 
-          outline: "none",
-          "box-shadow": "0 0 0 3px rgba(66, 153, 225, 0.5)"
-      }
-    };
-    button.onblur = () => {
-        button.styles = { "box-shadow": "none" };
-    };
-
-    return button;
-  };
 
   addControlButtons() {
     const controls = this.paintPage.createChild("div", {
