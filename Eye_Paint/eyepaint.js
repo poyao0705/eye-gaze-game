@@ -67,9 +67,12 @@ const svgAssets = {
   dog: dogSvg,
 };
 
-const colours = [
-  '#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#000000',
-  '#FFA500', '#800080', '#008000', '#000080', '#800000', '#FFFFFF'
+const colours1 = [
+  '#FF0000', '#00FF00', '#000080', '#FFFF00', '#000000'
+];
+
+const colours2 = [
+  '#FFA500', '#800080', '#800000', '#FFFFFF'
 ];
 
 class EyePaint extends SvgPlus {
@@ -93,12 +96,12 @@ class EyePaint extends SvgPlus {
       height: "100%",
       width: "100%",
       display: "grid",
-      "grid-template-columns": "20% 5% 1fr 20%",
+      "grid-template-columns": "20% 7% 1fr 20%",
       "background-image": "url('http://127.0.0.1:5502/images/EyePaint/background.jfif')",
       "background-size": "cover",
       "background-position": "center",
       "background-repeat": "repeat",
-      "z-index": "1"
+      "z-index": "1",
     };
 
     this.props = {
@@ -192,9 +195,9 @@ class EyePaint extends SvgPlus {
     const camera = this.contentRight.createChild("img", {
       src: "http://127.0.0.1:5502/images/EyePaint/camera.svg",
       styles: {
-        width: "22.5%",
-        height: "10%",
-        margin: "0 0.5em 0 0",
+        width: "31.5%",
+        height: "11%",
+        margin: "5px 5px 0 0",
         cursor: "pointer",
       },
     });
@@ -202,12 +205,15 @@ class EyePaint extends SvgPlus {
     const back = this.contentRight.createChild("img", {
       src: "http://127.0.0.1:5502/images/EyePaint/back.svg",
       styles: {
-        width: "22.5%",
-        height: "10%",
-        margin: "0 0.5em 0 0",
+        width: "31.5%",
+        height: "11%",
+        margin: "5px 5px 0 0",
         cursor: "pointer",
       },
     });
+
+    this.addButtonAnimation(back);
+    this.addButtonAnimation(camera);
 
     this.reference = this.contentRight.createChild("img", {
       src: `http://127.0.0.1:5502/images/eyepaint/dog.svg`,
@@ -216,6 +222,23 @@ class EyePaint extends SvgPlus {
         margin: "0 auto"
       }
     });
+  }
+
+  addButtonAnimation(button) {
+      button.addEventListener('mousedown', () => {
+        button.style.transform = 'scale(0.9)';
+        button.style.transition = 'transform 0.1s ease-in-out';
+      });
+
+      button.addEventListener('mouseup', () => {
+        button.style.transform = 'scale(1)';
+        button.style.transition = 'transform 0.1s ease-in-out';
+      });
+  
+      button.addEventListener('mouseleave', () => {
+        button.style.transform = 'scale(1)';
+        button.style.transition = 'transform 0.1s ease-in-out';
+      });
   }
 
   shadeColour(colour, percent) {
@@ -233,55 +256,86 @@ class EyePaint extends SvgPlus {
   };
 
   addColourButtons() {
-    const colourPicker = this.createChild("div", {
+    const background = this.createChild("div", {
       styles: {
         display: "flex",
-        "flex-wrap": "wrap",
-        "justify-content": "end",
-        "align-items": "center",
-        "align-content": "flex-start"
+        "flex-direction": "row",
+        "background-image": "url('http://127.0.0.1:5502/images/EyePaint/palette.png')",
+        "background-size": "100% 100%",
+        "background-position": "left",
+        "background-repeat": "no-repeat",
       },
     });
 
-    colours.forEach((colour) => {
-      const button = colourPicker.createChild("button", {
-        styles: {
-          width: "35%",   
-          height: "13.5%",
-          "padding-left": "2em",
-          "padding-right": "2em",   
-          "border-radius": "50%", 
-          background: `linear-gradient(225deg, ${colour} 40%, ${this.shadeColour(colour, 0.7)} 100%)`,
-          border: "6px solid white",
-          margin: "1em",
-          cursor: "pointer",
-          transition: "transform 0.2s",
-        },
-      });
+    const colourPicker1 = background.createChild("div", {
+      styles: {
+        display: "flex",
+        "flex-wrap": "wrap",
+        "align-content": "center",
+        width: "45%",
+        "justify-content": "flex-end"
+      }
+    })
 
-      button.addEventListener("click", () => {
-        this.selectedColour = colour;
-      });
-      button.onmouseover = () => {
-        button.styles = { transform: "scale(1.15)" };
-      };
-      button.onmouseout = () => {
-        button.styles = { transform: "scale(1)" };
-      };
-      // Creates a border when the button is clicked on and removes it when it is not
-      button.onfocus = () => {
-        button.styles = { 
-            outline: "none",
-            "box-shadow": "0 0 0 3px rgba(66, 153, 225, 0.5)"
-        }
-      };
-      button.onblur = () => {
-          button.styles = { "box-shadow": "none" };
-      };
+    const colourPicker2 = background.createChild("div", {
+      styles: {
+        display: "flex",
+        "flex-wrap": "wrap",
+        "align-content": "center",
+        width: "45%",
+        "justify-content": "flex-start"
+      }
+    })
+
+    colours1.forEach((colour) => {
+      colourPicker1.appendChild(this.createButton(colour, colourPicker1));
     });
 
-    return colourPicker;
+    colours2.forEach((colour) => {
+      colourPicker2.appendChild(this.createButton(colour, colourPicker2));
+    });
+
+    return background;
   }
+
+  createButton(colour, colourPicker) {
+    const button = colourPicker.createChild("button", {
+      styles: {
+        width: "88%",   
+        height: "15%",
+        "padding-left": "2em",
+        "padding-right": "2em",   
+        "border-radius": "50%", 
+        background: `linear-gradient(225deg, ${colour} 40%, ${this.shadeColour(colour, 0.7)} 100%)`,
+        border: "6px solid white",
+        margin: "1em 0em",
+        cursor: "pointer",
+        transition: "transform 0.2s",
+      },
+    });
+
+    button.addEventListener("click", () => {
+      this.selectedColour = colour;
+    });
+    button.onmouseover = () => {
+      button.styles = { transform: "scale(1.1)" };
+    };
+    button.onmouseout = () => {
+      button.styles = { transform: "scale(1)" };
+    };
+    // Creates a border when the button is clicked on and removes it when it is not
+    button.onfocus = () => {
+      button.styles = { 
+          outline: "none",
+          "box-shadow": "0 0 0 3px rgba(66, 153, 225, 0.5)"
+      }
+    };
+    button.onblur = () => {
+        button.styles = { "box-shadow": "none" };
+    };
+
+    return button;
+  };
 
   addControlButtons() {
     const controls = this.createChild("div", {
@@ -297,7 +351,7 @@ class EyePaint extends SvgPlus {
       class: "controls",
       styles: {
         width: "90%",
-        height: "10%",
+        height: "auto",
         margin: "5px",
         cursor: "pointer",
       },
@@ -317,11 +371,14 @@ class EyePaint extends SvgPlus {
       class: "controls",
       styles: {
         width: "90%",
-        height: "10%",
+        height: "auto",
         margin: "5px",
         cursor: "pointer",
       },
     });
+
+    this.addButtonAnimation(eraser);
+    this.addButtonAnimation(resetButton);
 
     resetButton.onclick = () => {
       this.resetColours();
