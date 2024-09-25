@@ -5,14 +5,14 @@ import {
 
 async function loadSVGs(images) {
   let svglib = {};
-  let promises = images.map((image) => {
-    let a = async () => {
+  let svgFetchPromises = images.map((image) => {
+    let fetchSVG = async () => {
       let url = `http://127.0.0.1:5502/images/eyepaint/${image}.svg`;
       svglib[image] = await (await fetch(url)).text();
     }
-    return a();
+    return fetchSVG();
   });
-  await Promise.all(promises);
+  await Promise.all(svgFetchPromises);
   return svglib;
 }
 
@@ -89,30 +89,24 @@ class EyePaint extends SvgPlus {
       this.applyColourUpdate(update);
     });
 
+    this.createVolumeButton();
+    this.app.set("muted", true);
+
     this.app.onValue("muted", (value) => {
       console.log("muted", value);
       if (value) {
-        // Mute logic
-        if (this.volumeButton) {
-          this.volumeButton.props = {
-            src: "http://127.0.0.1:5502/images/volume-mute.svg",
-          };
-        }
+        this.volumeButton.src = "http://127.0.0.1:5502/images/volume-mute.svg";
         this.music.muted = true;
       } else {
-        // Unmute logic
-        if (this.volumeButton) {
-          this.volumeButton.props = {
-            src: "http://127.0.0.1:5502/images/volume.svg",
-          };
-        }
+        this.volumeButton.src = "http://127.0.0.1:5502/images/volume.svg";
         this.music.muted = false;
         this.music.play();
       }
     });
 
-    this.app.set("muted", true);
+    
     this.app.set("state", { page: "init", selectedImage: null, pageNumber: null });
+    
   }
 
   set State(stateObj) {
@@ -140,7 +134,7 @@ class EyePaint extends SvgPlus {
     this.paintPage.style.display = "none";
   }
 
-  async createVolumeButton(app, page) {
+  async createVolumeButton() {
     // let src;
     // if (await this.getMuted()) {
     //   src = "http://127.0.0.1:5502/images/EyePaint/volume-mute.svg";
@@ -149,7 +143,7 @@ class EyePaint extends SvgPlus {
     // }
     
     // this.volumeButton = null;
-    this.volumeButton = page.createChild("img", {
+    this.volumeButton = this.createChild("img", {
       id: "volume",
       src: "http://127.0.0.1:5502/images/EyePaint/volume-mute.svg",
       styles: {
@@ -164,11 +158,8 @@ class EyePaint extends SvgPlus {
     });
 
     this.volumeButton.addEventListener("click", async () => {
-      if (await this.getMuted()) {
-        app.set("muted", false);
-      } else {
-        app.set("muted", true);
-      }
+      const isMuted = await this.getMuted(); // Get current mute state
+      this.app.set("muted", !isMuted); // Toggle mute state
     });
   }
 
@@ -182,7 +173,7 @@ class EyePaint extends SvgPlus {
     this.initPage.innerHTML = "";
     this.initPage.style.display = "block";
     // console.log("init page");
-    this.createVolumeButton(this.app, this.initPage);
+    // this.createVolumeButton(this.app, this.initPage);
 
     // Center logo in the middle of the page
     const logo = this.initPage.createChild("img", {
@@ -254,7 +245,7 @@ class EyePaint extends SvgPlus {
     this.hideAllPages();
     this.loadPage.style.display = "block";
     this.loadPage.innerHTML = "";
-    this.createVolumeButton(this.app, this);
+    // this.createVolumeButton(this.app, this);
   
     // Update loadPage styles
     this.loadPage.styles = displayContentDefaultStyle;
@@ -331,15 +322,16 @@ class EyePaint extends SvgPlus {
     this.hideAllPages();
     this.paintPage.style.display = "block";
     this.paintPage.innerHTML = "";
-    if (this.volumeButton) {
-      this.volumeButton = null;
-    }
+    // if (this.volumeButton) {
+    //   this.volumeButton = null;
+    // }
  
     this.paintPage.styles = {
       height: "100%",
       width: "100%",
       display: "grid",
-      "grid-template-columns": "20% 7% 1fr 20%"
+      "grid-template-columns": "20% 7% 1fr 20%",
+      position: "relative"
     };
     
 
@@ -376,36 +368,44 @@ class EyePaint extends SvgPlus {
     this.contentRight = this.paintPage.createChild("div", {
       id: "contentRight",
       styles: {
+        position: "absolute",
+        top: "0",
+        right: "0",
+        width: "20%",
+        height: "100%",
         display: "flex",
-        "flex-wrap": "wrap",
-        "justify-content": "end"
+        "flex-direction": "column",
+        "justify-content": "space-between",
+        "align-items": "flex-end",
       },
     });
 
-    const camera = this.contentRight.createChild("img", {
-      id: "camera",
-      src: "http://127.0.0.1:5502/images/EyePaint/volume-mute.svg",
-      styles: {
-        width: "31.5%",
-        height: "11%",
-        margin: "5px 5px 0 0",
-        cursor: "pointer",
-      },
-    });
+    // const camera = this.contentRight.createChild("img", {
+    //   id: "camera",
+    //   src: "http://127.0.0.1:5502/images/EyePaint/volume-mute.svg",
+    //   styles: {
+    //     width: "31.5%",
+    //     height: "11%",
+    //     margin: "5px 5px 0 0",
+    //     cursor: "pointer",
+    //   },
+    // });
 
     const back = this.contentRight.createChild("img", {
       id: "back",
       src: "http://127.0.0.1:5502/images/EyePaint/back.svg",
       styles: {
-        width: "31.5%",
-        height: "11%",
+        position: "absolute",
+        left: "25%",
+        width: "30%",
+        height: "auto",
         margin: "5px 5px 0 0",
         cursor: "pointer",
       },
     });
 
     this.addButtonAnimation(back);
-    this.addButtonAnimation(camera);
+    // this.addButtonAnimation(camera);
 
     back.addEventListener("click", () => {
       this.app.set("state", { page: "load", selectedImage: null, pageNumber: 1 });
@@ -415,8 +415,12 @@ class EyePaint extends SvgPlus {
     this.reference = this.contentRight.createChild("img", {
       src: `http://127.0.0.1:5502/images/eyepaint/${selectedImage}.svg`,
       styles: {
-        "align-self": "end",
-        margin: "0 auto"
+        position: "absolute",
+        bottom: "0",
+        width: "90%",
+        height: "auto",
+        "margin-bottom": "10px",
+        "align-self": "flex-end"
       }
     });
   }
