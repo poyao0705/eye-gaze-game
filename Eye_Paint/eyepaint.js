@@ -71,10 +71,6 @@ class EyePaint extends SvgPlus {
     this.music = this.createChild("audio", {
       src: "http://127.0.0.1:5502/sounds/EyePaint/music_menu.ogg"
     });
-    // this.music.volume = 0.5;
-    // this.music.loop = true;
-    // this.music.load();
-    // this.music.play();
 
     // Create separate divs for each page
     this.initPage = this.createChild("div", { id: "initPage", styles: { display: "none" } });
@@ -100,13 +96,13 @@ class EyePaint extends SvgPlus {
       } else {
         this.volumeButton.src = "http://127.0.0.1:5502/images/volume.svg";
         this.music.muted = false;
+        this.music.volume = 0.5;
+        this.music.loop = true;
         this.music.play();
       }
     });
-
     
     this.app.set("state", { page: "init", selectedImage: null, pageNumber: null });
-    
   }
 
   set State(stateObj) {
@@ -135,14 +131,6 @@ class EyePaint extends SvgPlus {
   }
 
   async createVolumeButton() {
-    // let src;
-    // if (await this.getMuted()) {
-    //   src = "http://127.0.0.1:5502/images/EyePaint/volume-mute.svg";
-    // } else {
-    //   src = "http://127.0.0.1:5502/images/EyePaint/volume.svg";
-    // }
-    
-    // this.volumeButton = null;
     this.volumeButton = this.createChild("img", {
       id: "volume",
       src: "http://127.0.0.1:5502/images/EyePaint/volume-mute.svg",
@@ -380,24 +368,13 @@ class EyePaint extends SvgPlus {
       },
     });
 
-    // const camera = this.contentRight.createChild("img", {
-    //   id: "camera",
-    //   src: "http://127.0.0.1:5502/images/EyePaint/volume-mute.svg",
-    //   styles: {
-    //     width: "31.5%",
-    //     height: "11%",
-    //     margin: "5px 5px 0 0",
-    //     cursor: "pointer",
-    //   },
-    // });
-
     const back = this.contentRight.createChild("img", {
       id: "back",
       src: "http://127.0.0.1:5502/images/EyePaint/back.svg",
       styles: {
         position: "absolute",
-        left: "25%",
-        width: "30%",
+        left: "33%",
+        width: "31.5%",
         height: "auto",
         margin: "5px 5px 0 0",
         cursor: "pointer",
@@ -405,7 +382,6 @@ class EyePaint extends SvgPlus {
     });
 
     this.addButtonAnimation(back);
-    // this.addButtonAnimation(camera);
 
     back.addEventListener("click", () => {
       this.app.set("state", { page: "load", selectedImage: null, pageNumber: 1 });
