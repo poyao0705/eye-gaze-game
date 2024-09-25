@@ -46,6 +46,10 @@ class EyePaint extends SvgPlus {
   constructor(editable, app) {
     super("div");
 
+    // window.addEventListener("mousemove", (e) => {
+    //   this.eyePosition = { x: e.clientX, y: e.clientY };
+    // });
+
     this.app = app;
     this.editable = editable;
 
@@ -95,10 +99,10 @@ class EyePaint extends SvgPlus {
     this.app.onValue("muted", (value) => {
       console.log("muted", value);
       if (value) {
-        this.volumeButton.src = "http://127.0.0.1:5502/images/volume-mute.svg";
+        this.volumeButton.src = "http://127.0.0.1:5502/images/eyepaint/volume-mute.svg";
         this.music.muted = true;
       } else {
-        this.volumeButton.src = "http://127.0.0.1:5502/images/volume.svg";
+        this.volumeButton.src = "http://127.0.0.1:5502/images/eyepaint/volume.svg";
         this.music.muted = false;
         this.music.play();
       }
@@ -145,13 +149,13 @@ class EyePaint extends SvgPlus {
     // this.volumeButton = null;
     this.volumeButton = this.createChild("img", {
       id: "volume",
-      src: "http://127.0.0.1:5502/images/EyePaint/volume-mute.svg",
+      src: "http://127.0.0.1:5502/images/eyepaint/volume-mute.svg",
       styles: {
         position: "absolute",
         top: "0",
         right: "0",
-        width: "6.5%",
-        height: "11%",
+        width: "10%",
+        height: "12%",
         margin: "5px 5px 0 0",
         cursor: "pointer"
       },
@@ -632,6 +636,37 @@ class EyePaint extends SvgPlus {
       this.app.set("colorUpdates", update);
     });
   }
+
+  // checkVectorOnItem(vector) {
+  //   let x = vector.x;
+  //   let y = vector.y;
+  //   let items = this.items.children;
+  //   for (let i = 0; i < items.length; i++) {
+  //     let item = items[i];
+  //     let rect = item.getBoundingClientRect();
+  //     // enlarge clickbox by 10%
+  //     if (
+  //       x > rect.left * 0.9 &&
+  //       x < rect.right * 1.1 &&
+  //       y > rect.top * 0.9 &&
+  //       y < rect.bottom * 1.1
+  //     ) {
+  //       return item;
+  //     }
+  //   }
+  //   return null;
+  // }
+
+  // // check if eye position is on an item and call the opacity animation
+  // set eyePosition(vector) {
+  //   let item = this.checkVectorOnItem(vector);
+  //   [...this.items.children].forEach((i) => {
+  //     i.hover = false;
+  //   });
+  //   if (item) {
+  //     item.hover = true;
+  //   }
+  // }
 }
 
 export default EyePaint;
