@@ -142,8 +142,8 @@ class EyePaint extends SvgPlus {
         position: "absolute",
         top: "0",
         right: "0",
-        width: "10%",
-        height: "12%",
+        width: "6.3%",
+        height: "auto",
         margin: "5px 5px 0 0",
         cursor: "pointer"
       },
@@ -153,6 +153,8 @@ class EyePaint extends SvgPlus {
       const isMuted = await this.getMuted(); // Get current mute state
       this.app.set("muted", !isMuted); // Toggle mute state
     });
+
+    this.addButtonAnimation(this.volumeButton);
   }
 
   async getMuted() {
