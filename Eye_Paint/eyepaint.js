@@ -2,6 +2,7 @@ import {
   SvgPlus,
   SquidlyApp,
 } from "https://session-app.squidly.com.au/src/Apps/app-class.js";
+import ColorButton from "./ColorButton.js";
 
 async function loadSVGs(images) {
   let svglib = {};
@@ -46,9 +47,9 @@ class EyePaint extends SvgPlus {
   constructor(editable, app) {
     super("div");
 
-    // window.addEventListener("mousemove", (e) => {
-    //   this.eyePosition = { x: e.clientX, y: e.clientY };
-    // });
+    window.addEventListener("mousemove", (e) => {
+      this.eyePosition = { x: e.clientX, y: e.clientY };
+    });
 
     this.app = app;
     this.editable = editable;
@@ -384,17 +385,6 @@ class EyePaint extends SvgPlus {
       },
     });
 
-    // const camera = this.contentRight.createChild("img", {
-    //   id: "camera",
-    //   src: "http://127.0.0.1:5502/images/EyePaint/volume-mute.svg",
-    //   styles: {
-    //     width: "31.5%",
-    //     height: "11%",
-    //     margin: "5px 5px 0 0",
-    //     cursor: "pointer",
-    //   },
-    // });
-
     const back = this.contentRight.createChild("img", {
       id: "back",
       src: "http://127.0.0.1:5502/images/EyePaint/back.svg",
@@ -461,28 +451,15 @@ class EyePaint extends SvgPlus {
   };
 
   createButton(colour, colourPicker) {
-    const button = colourPicker.createChild("button", {
-      styles: {
-        width: "88%",   
-        height: "15%",
-        "padding-left": "2em",
-        "padding-right": "2em",   
-        "border-radius": "50%", 
-        background: `linear-gradient(225deg, ${colour} 40%, ${this.shadeColour(colour, 0.7)} 100%)`,
-        border: "6px solid white",
-        margin: "1em 0em",
-        cursor: "pointer",
-        transition: "transform 0.2s",
-      },
-    });
+    const button = colourPicker.createChild(ColorButton, {}, [colour, this.editable]);
 
-    button.addEventListener("click", () => {
-      this.selectedColour = colour;
-    });
+    
     button.onmouseover = () => {
+      button.hover = true;
       button.styles = { transform: "scale(1.1)" };
     };
     button.onmouseout = () => {
+      button.hover = false;
       button.styles = { transform: "scale(1)" };
     };
     // Creates a border when the button is clicked on and removes it when it is not
@@ -495,6 +472,16 @@ class EyePaint extends SvgPlus {
     button.onblur = () => {
         button.styles = { "box-shadow": "none" };
     };
+
+    button.addEventListener("click", () => {
+      // add blur to all other buttons if the selected colour is not the same as the clicked colour
+      if (this.selectedColour !== colour) {
+        this.paintPage.querySelectorAll("button").forEach((button) => {
+          button.styles = { "box-shadow": "none" };
+        });
+      }
+      this.selectedColour = colour;
+    });
 
     return button;
   };
@@ -637,36 +624,38 @@ class EyePaint extends SvgPlus {
     });
   }
 
-  // checkVectorOnItem(vector) {
-  //   let x = vector.x;
-  //   let y = vector.y;
-  //   let items = this.items.children;
-  //   for (let i = 0; i < items.length; i++) {
-  //     let item = items[i];
-  //     let rect = item.getBoundingClientRect();
-  //     // enlarge clickbox by 10%
-  //     if (
-  //       x > rect.left * 0.9 &&
-  //       x < rect.right * 1.1 &&
-  //       y > rect.top * 0.9 &&
-  //       y < rect.bottom * 1.1
-  //     ) {
-  //       return item;
-  //     }
-  //   }
-  //   return null;
-  // }
+  checkVectorOnItem(vector) {
+    let x = vector.x;
+    let y = vector.y;
+    // let items = this.items.children;
+    let items = this.paintPage.querySelectorAll("button");
+    for (let i = 0; i < items.length; i++) {
+      let item = items[i];
+      let rect = item.getBoundingClientRect();
+      // enlarge clickbox by 10%
+      if (
+        x > rect.left * 0.9 &&
+        x < rect.right * 1.1 &&
+        y > rect.top * 0.9 &&
+        y < rect.bottom * 1.1
+      ) {
+        return item;
+      }
+    }
+    return null;
+  }
 
   // // check if eye position is on an item and call the opacity animation
-  // set eyePosition(vector) {
-  //   let item = this.checkVectorOnItem(vector);
-  //   [...this.items.children].forEach((i) => {
-  //     i.hover = false;
-  //   });
-  //   if (item) {
-  //     item.hover = true;
-  //   }
-  // }
+  set eyePosition(vector) {
+    console.log("eyePosition", vector);
+    let item = this.checkVectorOnItem(vector);
+    [...this.paintPage.querySelectorAll("button")].forEach((i) => {
+      i.hover = false;
+    });
+    if (item) {
+      item.hover = true;
+    }
+  }
 }
 
 export default EyePaint;
