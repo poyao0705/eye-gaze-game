@@ -4,7 +4,7 @@ import {
 } from "https://session-app.squidly.com.au/src/Apps/app-class.js";
 import BedroomWindow from "./SNS/BedroomWindow.js";
 // import EyePaint from "./EyePaint/eyepaint.js";
-import EyePaint from "./Eye_Paint/eyepaint.js";
+import EyePaint from "./Eye_Paint/Eyepaint.js";
 
 // const itemPositions = {
 //   Standard: [
@@ -1022,9 +1022,11 @@ class MainWindow extends SvgPlus {
       width: "100%",
       height: "100%"
     };
+    this.eyepaint = this.createChild(EyePaint, {}, this.isSender, this.app);
+  }
 
-    let eyepaint = new EyePaint(this.isSender, this.app);
-    this.appendChild(eyepaint);
+  set eyePosition(vector) {
+    this.eyepaint.eyePosition = vector;
   }
 }
 
