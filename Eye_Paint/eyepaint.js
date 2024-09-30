@@ -356,6 +356,7 @@ class EyePaint extends SvgPlus {
     svgElement.querySelectorAll("path:not([fixed]), g:not([fixed]), circle:not([fixed]), rect:not([fixed])").forEach((element) => {
       element.style.fill = "white";
     });
+  
     this.setupSVGInteraction(svgElement);
     console.log(svgElement);
 
