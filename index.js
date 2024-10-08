@@ -1044,11 +1044,11 @@ export default class GameApp extends SquidlyApp {
   }
 
   static get name() {
-    return "MyApp";
+    return "Kid's Color Book";
   }
 
   static get description() {
-    return "Eye Paint";
+    return "Paint with your eyes!";
   }
 
   static get appIcon() {
