@@ -12,7 +12,7 @@ async function loadSVGs(images) {
   let svglib = {};
   let svgFetchPromises = images.map((image) => {
     let fetchSVG = async () => {
-      let url = `http://127.0.0.1:5502/images/eyepaint/${image}.svg`;
+      let url = `https://eyepaint.squidly.com.au/images/eyepaint/${image}.svg`;
       svglib[image] = await (await fetch(url)).text();
     };
     return fetchSVG();
@@ -90,7 +90,7 @@ class EyePaint extends SvgPlus {
       position: "relative",
       display: "flex",
       "background-image":
-        "url('http://127.0.0.1:5502/images/EyePaint/background.jfif')",
+        "url('https://eyepaint.squidly.com.au/images/EyePaint/background.jfif')",
       "background-size": "cover",
       "background-position": "center",
       "background-repeat": "repeat",
@@ -102,7 +102,7 @@ class EyePaint extends SvgPlus {
     };
 
     this.music = this.createChild("audio", {
-      src: "http://127.0.0.1:5502/sounds/EyePaint/music_menu.ogg",
+      src: "https://eyepaint.squidly.com.au/sounds/EyePaint/music_menu.ogg",
     });
 
     // Create separate divs for each page
@@ -142,11 +142,11 @@ class EyePaint extends SvgPlus {
       console.log("muted", value);
       if (value) {
         this.volumeButton.src =
-          "http://127.0.0.1:5502/images/eyepaint/volume-mute.png";
+          "https://eyepaint.squidly.com.au/images/eyepaint/volume-mute.png";
         this.music.muted = true;
       } else {
         this.volumeButton.src =
-          "http://127.0.0.1:5502/images/eyepaint/volume.png";
+          "https://eyepaint.squidly.com.au/images/eyepaint/volume.png";
         this.music.muted = false;
         this.music.volume = 0.5;
         this.music.loop = true;
@@ -188,7 +188,7 @@ class EyePaint extends SvgPlus {
 
   createHomeButton() {
     this.homeButton = this.createChild("img", {
-      src: "http://127.0.0.1:5502/images/eyepaint/back-icon.png",
+      src: "https://eyepaint.squidly.com.au/images/eyepaint/back-icon.png",
       styles: {
         position: "absolute",
         top: "0",
@@ -226,7 +226,7 @@ class EyePaint extends SvgPlus {
   async createVolumeButton() {
     this.volumeButton = this.createChild("img", {
       id: "volume",
-      src: "http://127.0.0.1:5502/images/eyepaint/volume-mute.png",
+      src: "https://eyepaint.squidly.com.au/images/eyepaint/volume-mute.png",
       styles: {
         position: "absolute",
         top: "0",
@@ -261,7 +261,7 @@ class EyePaint extends SvgPlus {
 
     // Center logo in the middle of the page
     const logo = this.initPage.createChild("img", {
-      src: "http://127.0.0.1:5502/images/eyepaint/main_page.jfif",
+      src: "https://eyepaint.squidly.com.au/images/eyepaint/main_page.jfif",
       styles: {
         position: "absolute",
         top: "50%",
@@ -276,7 +276,7 @@ class EyePaint extends SvgPlus {
 
     // Start button under the logo
     const startButton = this.initPage.createChild("img", {
-      src: "http://127.0.0.1:5502/images/EyePaint/play.png",
+      src: "https://eyepaint.squidly.com.au/images/EyePaint/play.png",
       innerHTML: "Start",
       id: "startButton",
       styles: {
@@ -301,7 +301,7 @@ class EyePaint extends SvgPlus {
 
   createPaginationButtons(id, position) {
     return this.loadPage.createChild("img", {
-      src: `http://127.0.0.1:5502/images/EyePaint/${id}.png`,
+      src: `https://eyepaint.squidly.com.au/images/EyePaint/${id}.png`,
       id: id,
       styles: {
         position: "absolute",
@@ -315,9 +315,9 @@ class EyePaint extends SvgPlus {
 
   loadImageOptions() {
     if (
-      this.music.src !== "http://127.0.0.1:5502/sounds/EyePaint/music_game.ogg"
+      this.music.src !== "https://eyepaint.squidly.com.au/sounds/EyePaint/music_game.ogg"
     ) {
-      this.music.src = "http://127.0.0.1:5502/sounds/EyePaint/music_game.ogg";
+      this.music.src = "https://eyepaint.squidly.com.au/sounds/EyePaint/music_game.ogg";
       this.music.play();
     }
 
@@ -398,7 +398,7 @@ class EyePaint extends SvgPlus {
       });
 
       let canvasImage = imageOption.createChild("img", {
-        src: `http://127.0.0.1:5502/images/eyepaint/canvas.svg`,
+        src: `https://eyepaint.squidly.com.au/images/eyepaint/canvas.svg`,
         styles: {
           width: "100%",
           height: "auto",
@@ -408,7 +408,7 @@ class EyePaint extends SvgPlus {
       });
 
       let img = imageOption.createChild("img", {
-        src: `http://127.0.0.1:5502/images/eyepaint/${image}.svg`,
+        src: `https://eyepaint.squidly.com.au/images/eyepaint/${image}.svg`,
         styles: {
           position: "absolute",
           top: "50%",
@@ -531,7 +531,7 @@ class EyePaint extends SvgPlus {
     });
 
     const cameraButton = this.contentRight.createChild(ControlButton, {
-      src: "http://127.0.0.1:5502/images/EyePaint/camera.png",
+      src: "https://eyepaint.squidly.com.au/images/EyePaint/camera.png",
       class: "controls",
       events: {
         click: () => {
@@ -549,7 +549,7 @@ class EyePaint extends SvgPlus {
     });
 
     this.reference = this.contentRight.createChild("img", {
-      src: `http://127.0.0.1:5502/images/eyepaint/${selectedImage}.svg`,
+      src: `https://eyepaint.squidly.com.au/images/eyepaint/${selectedImage}.svg`,
       styles: {
         position: "absolute",
         bottom: "0",
@@ -649,7 +649,7 @@ class EyePaint extends SvgPlus {
         display: "flex",
         "flex-direction": "row",
         "background-image":
-          "url('http://127.0.0.1:5502/images/EyePaint/palette.png')",
+          "url('https://eyepaint.squidly.com.au/images/EyePaint/palette.png')",
         "background-size": "100% 100%",
         "background-position": "left",
         "background-repeat": "no-repeat",
@@ -699,7 +699,7 @@ class EyePaint extends SvgPlus {
     });
 
     const eraser = controls.createChild(ControlButton, {
-      src: "http://127.0.0.1:5502/images/EyePaint/eraser.svg",
+      src: "https://eyepaint.squidly.com.au/images/EyePaint/eraser.svg",
       class: "controls",
       styles: {
         width: "90%",
@@ -714,7 +714,7 @@ class EyePaint extends SvgPlus {
     };
 
     const resetButton = controls.createChild(ControlButton, {
-      src: "http://127.0.0.1:5502/images/EyePaint/reset.svg",
+      src: "https://eyepaint.squidly.com.au/images/EyePaint/reset.svg",
       class: "controls",
       styles: {
         width: "90%",
