@@ -2,9 +2,7 @@ import {
   SvgPlus,
   SquidlyApp,
 } from "https://session-app.squidly.com.au/src/Apps/app-class.js";
-import BedroomWindow from "./SNS/BedroomWindow.js";
-// import EyePaint from "./EyePaint/eyepaint.js";
-import EyePaint from "./Eye_Paint/EyePaint.js";
+import EyePaint from "./Eye_Paint/eyepaint.js";
 
 // const itemPositions = {
 //   Standard: [
