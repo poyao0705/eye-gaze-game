@@ -12,7 +12,7 @@ async function loadSVGs(images) {
   let svglib = {};
   let svgFetchPromises = images.map((image) => {
     let fetchSVG = async () => {
-      let url = `https://eyepaint.squidly.com.au/images/eyepaint/${image}.svg`;
+      let url = `https://eyepaint.squidly.com.au/images/EyePaint/${image}.svg`;
       svglib[image] = await (await fetch(url)).text();
     };
     return fetchSVG();
@@ -142,11 +142,11 @@ class EyePaint extends SvgPlus {
       console.log("muted", value);
       if (value) {
         this.volumeButton.src =
-          "https://eyepaint.squidly.com.au/images/eyepaint/volume-mute.png";
+          "https://eyepaint.squidly.com.au/images/EyePaint/volume-mute.png";
         this.music.muted = true;
       } else {
         this.volumeButton.src =
-          "https://eyepaint.squidly.com.au/images/eyepaint/volume.png";
+          "https://eyepaint.squidly.com.au/images/EyePaint/volume.png";
         this.music.muted = false;
         this.music.volume = 0.5;
         this.music.loop = true;
@@ -162,6 +162,9 @@ class EyePaint extends SvgPlus {
   }
 
   set State(stateObj) {
+    if (!stateObj){ 
+      stateObj = { page: "init", selectedImage: null, pageNumber: null };
+    }
     const { page, selectedImage, pageNumber } = stateObj;
     this.selectedImage = selectedImage;
     this.pageNumber = pageNumber;
@@ -188,7 +191,7 @@ class EyePaint extends SvgPlus {
 
   createHomeButton() {
     this.homeButton = this.createChild("img", {
-      src: "https://eyepaint.squidly.com.au/images/eyepaint/back-icon.png",
+      src: "https://eyepaint.squidly.com.au/images/EyePaint/back-icon.png",
       styles: {
         position: "absolute",
         top: "0",
@@ -226,7 +229,7 @@ class EyePaint extends SvgPlus {
   async createVolumeButton() {
     this.volumeButton = this.createChild("img", {
       id: "volume",
-      src: "https://eyepaint.squidly.com.au/images/eyepaint/volume-mute.png",
+      src: "https://eyepaint.squidly.com.au/images/EyePaint/volume-mute.png",
       styles: {
         position: "absolute",
         top: "0",
@@ -261,7 +264,7 @@ class EyePaint extends SvgPlus {
 
     // Center logo in the middle of the page
     const logo = this.initPage.createChild("img", {
-      src: "https://eyepaint.squidly.com.au/images/eyepaint/main_page.jfif",
+      src: "https://eyepaint.squidly.com.au/images/EyePaint/main_page.jfif",
       styles: {
         position: "absolute",
         top: "50%",
@@ -398,7 +401,7 @@ class EyePaint extends SvgPlus {
       });
 
       let canvasImage = imageOption.createChild("img", {
-        src: `https://eyepaint.squidly.com.au/images/eyepaint/canvas.svg`,
+        src: `https://eyepaint.squidly.com.au/images/EyePaint/canvas.svg`,
         styles: {
           width: "100%",
           height: "auto",
@@ -408,7 +411,7 @@ class EyePaint extends SvgPlus {
       });
 
       let img = imageOption.createChild("img", {
-        src: `https://eyepaint.squidly.com.au/images/eyepaint/${image}.svg`,
+        src: `https://eyepaint.squidly.com.au/images/EyePaint/${image}.svg`,
         styles: {
           position: "absolute",
           top: "50%",
@@ -549,7 +552,7 @@ class EyePaint extends SvgPlus {
     });
 
     this.reference = this.contentRight.createChild("img", {
-      src: `https://eyepaint.squidly.com.au/images/eyepaint/${selectedImage}.svg`,
+      src: `https://eyepaint.squidly.com.au/images/EyePaint/${selectedImage}.svg`,
       styles: {
         position: "absolute",
         bottom: "0",
