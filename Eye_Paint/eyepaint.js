@@ -548,31 +548,6 @@ class EyePaint extends SvgPlus {
       },
     });
 
-
-    // const back = this.contentRight.createChild(ControlButton, {
-    //   id: "back",
-    //   src: "http://127.0.0.1:5502/images/EyePaint/back-icon.png",
-    //   styles: {
-    //     position: "absolute",
-    //     left: "0%",
-    //     width: "31.5%",
-    //     height: "auto",
-    //     margin: "5px 5px 0 0",
-    //     cursor: "pointer",
-    //   },
-    // });
-
-    // this.addButtonAnimation(back);
-
-    // back.addEventListener("click", () => {
-    //   this.app.set("state", {
-    //     page: "load",
-    //     selectedImage: null,
-    //     pageNumber: 1,
-    //   });
-    //   this.loadImageOptions();
-    // });
-
     this.reference = this.contentRight.createChild("img", {
       src: `http://127.0.0.1:5502/images/eyepaint/${selectedImage}.svg`,
       styles: {
@@ -663,14 +638,6 @@ class EyePaint extends SvgPlus {
       }
       this.selectedColour = colour;
       this.app.set("selectedColour", colour);
-
-      // colour the paint indicator
-
-      // this.paintIndicator.querySelectorAll("path").forEach((path) => {
-      //   console.log("path: ", path);
-      //   console.log("colour: ", colour);
-      //   path.style.fill = colour;
-      // });
     });
 
     return button;
