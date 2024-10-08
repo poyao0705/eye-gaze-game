@@ -1054,7 +1054,7 @@ export default class GameApp extends SquidlyApp {
   static get appIcon() {
     let icon = new SvgPlus("img");
     icon.props = {
-      src: "http://127.0.0.1:5502/images/eyepaint/example_eyepaint_logo.jpg",
+      src: "https://eyepaint.squidly.com.au/images/EyePaint/example_eyepaint_logo.jpg",
       styles: { width: "100%", height: "100%" },
     };
     return icon;
