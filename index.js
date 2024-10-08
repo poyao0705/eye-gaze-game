@@ -4,7 +4,7 @@ import {
 } from "https://session-app.squidly.com.au/src/Apps/app-class.js";
 import BedroomWindow from "./SNS/BedroomWindow.js";
 // import EyePaint from "./EyePaint/eyepaint.js";
-import EyePaint from "./Eye_Paint/Eyepaint.js";
+import EyePaint from "./Eye_Paint/EyePaint.js";
 
 // const itemPositions = {
 //   Standard: [
@@ -1050,13 +1050,13 @@ export default class GameApp extends SquidlyApp {
   }
 
   static get description() {
-    return "Eye'm'Home";
+    return "Eye Paint";
   }
 
   static get appIcon() {
     let icon = new SvgPlus("img");
     icon.props = {
-      src: "http://127.0.0.1:5502/images/icon.svg",
+      src: "http://127.0.0.1:5502/images/eyepaint/example_eyepaint_logo.jpg",
       styles: { width: "100%", height: "100%" },
     };
     return icon;
