@@ -162,9 +162,9 @@ class EyePaint extends SvgPlus {
   }
 
   set State(stateObj) {
-    if (!stateObj){ 
-      stateObj = { page: "init", selectedImage: null, pageNumber: null };
-    }
+    // if (!stateObj){ 
+    //   stateObj = { page: "init", selectedImage: null, pageNumber: null };
+    // }
     const { page, selectedImage, pageNumber } = stateObj;
     this.selectedImage = selectedImage;
     this.pageNumber = pageNumber;
