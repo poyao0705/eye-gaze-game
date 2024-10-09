@@ -120,7 +120,7 @@ class EyePaint extends SvgPlus {
     });
 
     this.app.onValue("state", (stateObj) => {
-      this.State = stateObj;
+      this.setState(stateObj);
     });
 
     this.app.onValue("colorUpdates", (update) => {
@@ -155,31 +155,37 @@ class EyePaint extends SvgPlus {
     });
 
     // this.app.set("state", { page: "init", selectedImage: null, pageNumber: null });
-    this.State = { page: "init", selectedImage: null, pageNumber: null };
+    this.setState({ page: "init", selectedImage: null, pageNumber: null });
 
     
     // this.loader = this.createChild(Loader, {});
   }
 
-  set State(stateObj) {
+  async setState(stateObj) {
+    this.hideAllPages();
+    // make this function async
+    const {page, selectedImage, pageNumber} = await this.app.get("state");
     // if (!stateObj){ 
     //   stateObj = { page: "init", selectedImage: null, pageNumber: null };
     // }
-    const { page, selectedImage, pageNumber } = stateObj;
-    this.selectedImage = selectedImage;
-    this.pageNumber = pageNumber;
-    console.log(page);
-    this.hideAllPages();
-    switch (page) {
-      case "init":
-        this.init();
-        break;
-      case "load":
-        this.loadImageOptions();
-        break;
-      case "paint":
-        this.paintImage(this.selectedImage);
-        break;
+    // const { page, selectedImage, pageNumber } = stateObj;
+    
+    if (page === null){
+      this.init();
+    } else {
+      this.selectedImage = selectedImage;
+      this.pageNumber = pageNumber;
+      switch (page) {
+        case "init":
+          this.init();
+          break;
+        case "load":
+          this.loadImageOptions();
+          break;
+        case "paint":
+          this.paintImage(this.selectedImage);
+          break;
+      }
     }
   }
 
