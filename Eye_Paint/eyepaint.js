@@ -161,32 +161,38 @@ class EyePaint extends SvgPlus {
     // this.loader = this.createChild(Loader, {});
   }
 
-  async setState(stateObj) {
+  async setState() {
     this.hideAllPages();
     // make this function async
-    const {page, selectedImage, pageNumber} = await this.app.get("state");
+    const stateObj = await this.app.get("state");
+    if (!stateObj){ 
+      this.init();
+    } else {
+      const {page, selectedImage, pageNumber} = stateObj;
+      if (page === null){
+        this.init();
+      } else {
+        this.selectedImage = selectedImage;
+        this.pageNumber = pageNumber;
+        switch (page) {
+          case "init":
+            this.init();
+            break;
+          case "load":
+            this.loadImageOptions();
+            break;
+          case "paint":
+            this.paintImage(this.selectedImage);
+            break;
+        }
+      }
+    }
     // if (!stateObj){ 
     //   stateObj = { page: "init", selectedImage: null, pageNumber: null };
     // }
     // const { page, selectedImage, pageNumber } = stateObj;
     
-    if (page === null){
-      this.init();
-    } else {
-      this.selectedImage = selectedImage;
-      this.pageNumber = pageNumber;
-      switch (page) {
-        case "init":
-          this.init();
-          break;
-        case "load":
-          this.loadImageOptions();
-          break;
-        case "paint":
-          this.paintImage(this.selectedImage);
-          break;
-      }
-    }
+    
   }
 
   hideAllPages() {
