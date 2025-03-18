@@ -70,9 +70,9 @@ const loadPageDefaultStyle = {
   margin: "auto",
   transform: "translate(-50%, -50%)",
 };
-const colours1 = ["#FF0000", "#00FF00", "#000080", "#FFFF00", "#000000"];
+const colours1 = ["#FF0000", "#00FF00", "#000080"];
 
-const colours2 = ["#FFA500", "#800080", "#800000", "#FFFFFF"];
+const colours2 = ["#FFA500", "#800080"];
 
 class EyePaint extends SvgPlus {
   constructor(editable, app) {

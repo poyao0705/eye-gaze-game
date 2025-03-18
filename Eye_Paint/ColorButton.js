@@ -16,8 +16,8 @@ class ColorButton extends SvgPlus {
 
     setupButton() {
         this.styles = {
-            width: "88%",   
-            height: "15%",
+            width: "100%",   
+            height: "20%",
             "padding-left": "2em",
             "padding-right": "2em",   
             "border-radius": "50%", 
