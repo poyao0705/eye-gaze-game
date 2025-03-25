@@ -17,16 +17,17 @@ class ColorButton extends SvgPlus {
     setupButton() {
         this.styles = {
             width: "90%",   
-            height: "30%",
+            height: "18%",
             "padding-left": "2em",
             "padding-right": "2em",   
-            "border-radius": "8px", 
+            "border-radius": "16px", 
             background: `linear-gradient(225deg, ${this.color} 40%, ${this.shadeColour(this.color, 0.7)} 100%)`,
             "border-width": "4px",
             border: "4px solid white",
-            margin: "1em 0em",
+            margin: "0.3em auto",
             cursor: "pointer",
             transition: "transform 0.2s",
+            "box-shadow": "0 2px 6px rgba(0, 0, 0, 0.15)",
             position: "relative",
         };
     }

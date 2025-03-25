@@ -494,8 +494,8 @@ class EyePaint extends SvgPlus {
     // Add in SVG to paint on
     const svgContent = svgAssets[selectedImage];
     const svgElement = SvgPlus.parseSVGString(svgContent);
-    svgElement.style.width = "99%";
-    svgElement.style.height = "110%";
+    svgElement.style.width = "110%";
+    svgElement.style.height = "120%";
     svgElement.style.display = "block"; // Center the SVG, by default element is inline
     svgElement.style.margin = "auto";
     this.canvas.appendChild(svgElement);
