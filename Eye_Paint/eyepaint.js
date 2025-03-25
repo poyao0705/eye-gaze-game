@@ -500,7 +500,13 @@ class EyePaint extends SvgPlus {
     svgElement.style.margin = "auto";
     this.canvas.appendChild(svgElement);
     this.paintPage.appendChild(this.canvas);
-
+    const defaultColors = {
+      "dog-element-5": "#FFD700", 
+    };
+    for (const [id, fill] of Object.entries(defaultColors)) {
+      const el = svgElement.querySelector(`#${id}`);
+      if (el) el.setAttribute("fill", fill);
+    }
     // Reset all colors to white
     svgElement
       .querySelectorAll(
