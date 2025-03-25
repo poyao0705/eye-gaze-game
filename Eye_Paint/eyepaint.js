@@ -494,19 +494,13 @@ class EyePaint extends SvgPlus {
     // Add in SVG to paint on
     const svgContent = svgAssets[selectedImage];
     const svgElement = SvgPlus.parseSVGString(svgContent);
-    svgElement.style.width = "90%";
+    svgElement.style.width = "99%";
     svgElement.style.height = "105%";
     svgElement.style.display = "block"; // Center the SVG, by default element is inline
     svgElement.style.margin = "auto";
     this.canvas.appendChild(svgElement);
     this.paintPage.appendChild(this.canvas);
-    const defaultColors = {
-      "dog-element-5": "#FFD700", 
-    };
-    for (const [id, fill] of Object.entries(defaultColors)) {
-      const el = svgElement.querySelector(`#${id}`);
-      if (el) el.setAttribute("fill", fill);
-    }
+    
     // Reset all colors to white
     svgElement
       .querySelectorAll(
@@ -526,6 +520,18 @@ class EyePaint extends SvgPlus {
     this.setupSVGInteraction(svgElement);
     // this.setupSVGClickEvents(svgElement);
     // console.log(svgElement);
+    const defaultColors = {
+      [`dog-element-5`]: "#FFD700", 
+    };
+    
+    for (const [id, fill] of Object.entries(defaultColors)) {
+      const el = this.paintPage.querySelector(`#${id}`);
+      if (el) {
+        el.style.fill = fill;
+        el.setAttribute("data-fixed", "true"); 
+        console.log(`Fixed default color ${fill} for ${id}`);
+      }
+    }
 
     // Create a container for the right column content
     this.contentRight = this.paintPage.createChild("div", {
@@ -794,6 +800,21 @@ class EyePaint extends SvgPlus {
     });
     console.log(`Total elements set up: ${elements.length}`);
   }
+  // applyColourUpdate(update) {
+  //   if (!update) {
+  //     console.warn("Invalid update received:", update);
+  //     return;
+  //   }
+  //   for (const id in update) {
+  //     const element = this.paintPage.querySelector(`#${id}`);
+  //     if (element) {
+  //       element.style.fill = update[id];
+  //       console.log(`Applied color ${update[id]} to element with id ${id}`);
+  //     } else {
+  //       console.warn(`Element with id ${id} not found`);
+  //     }
+  //   }
+  // }
   applyColourUpdate(update) {
     if (!update) {
       console.warn("Invalid update received:", update);
@@ -802,6 +823,10 @@ class EyePaint extends SvgPlus {
     for (const id in update) {
       const element = this.paintPage.querySelector(`#${id}`);
       if (element) {
+        if (element.getAttribute("data-fixed") === "true") {
+          console.log(`Skipped fixed element with id ${id}`);
+          continue;
+        }
         element.style.fill = update[id];
         console.log(`Applied color ${update[id]} to element with id ${id}`);
       } else {
