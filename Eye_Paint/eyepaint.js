@@ -521,18 +521,29 @@ class EyePaint extends SvgPlus {
     // this.setupSVGClickEvents(svgElement);
     // console.log(svgElement);
     const defaultColors = {
-      [`dog-element-5`]: "#FFD700", 
-      ['parrot-element-8']:"FFD700",
+      // dog: {
+      //   "dog-element-5": "#FFD700",
+      // },
+      parrot: {
+        "parrot-element-8": "#8BB4D6",
+      },
     };
     
-    for (const [id, fill] of Object.entries(defaultColors)) {
-      const el = this.paintPage.querySelector(`#${id}`);
-      if (el) {
-        el.style.fill = fill;
-        el.setAttribute("data-fixed", "true"); 
-        console.log(`Fixed default color ${fill} for ${id}`);
-      }
+    
+    const fixedMap = defaultColors[selectedImage];
+if (fixedMap) {
+  for (const [id, fill] of Object.entries(fixedMap)) {
+    const el = this.paintPage.querySelector(`#${id}`);
+    if (el) {
+      el.style.fill = fill;
+      el.setAttribute("data-fixed", "true");
+      console.log(`Fixed default color ${fill} for ${id}`);
+    } else {
+      console.warn(`!Element ${id} not found`);
     }
+  }
+}
+
 
     // Create a container for the right column content
     this.contentRight = this.paintPage.createChild("div", {
