@@ -521,12 +521,8 @@ class EyePaint extends SvgPlus {
     // this.setupSVGClickEvents(svgElement);
     // console.log(svgElement);
     const defaultColors = {
-      "dog": {
-      "dog-element-5": "#FFD700",
-      }, 
-      "parrot": {
-        "parrot-element-8": "#8BB4D6",  
-      }
+      [`dog-element-5`]: "#FFD700", 
+      ['parrot-element-8']:"FFD700",
     };
     
     for (const [id, fill] of Object.entries(defaultColors)) {
