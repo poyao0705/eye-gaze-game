@@ -82,6 +82,7 @@ class EyePaint extends SvgPlus {
     this.editable = editable;
 
     this.selectedColour = null;
+    console.log("Hello from Gary")
 
     // Main container styles
     this.styles = {
@@ -460,6 +461,7 @@ class EyePaint extends SvgPlus {
   }
 
   paintImage(selectedImage) {
+    
     this.hideAllPages();
     this.homeButton.style.display = "block";
     this.paintPage.style.display = "block";
@@ -477,7 +479,7 @@ class EyePaint extends SvgPlus {
     };
 
     // Add colour palette and control buttons
-    const colourPicker = this.addColourButtons();
+    const colourPicker = this.addColourButtons(selectedImage);
     const controls = this.addControlButtons();
     this.paintPage.appendChild(colourPicker);
     this.paintPage.appendChild(controls);
@@ -495,7 +497,7 @@ class EyePaint extends SvgPlus {
     const svgContent = svgAssets[selectedImage];
     const svgElement = SvgPlus.parseSVGString(svgContent);
     svgElement.style.width = "99%";
-    svgElement.style.height = "105%";
+    svgElement.style.height = "auto";
     svgElement.style.display = "block"; // Center the SVG, by default element is inline
     svgElement.style.margin = "auto";
     this.canvas.appendChild(svgElement);
@@ -521,11 +523,38 @@ class EyePaint extends SvgPlus {
     // this.setupSVGClickEvents(svgElement);
     // console.log(svgElement);
     const defaultColors = {
-      // dog: {
-      //   "dog-element-5": "#FFD700",
-      // },
+      dog: {
+        "dog-element-5": "#FFD700",
+      },
       parrot: {
-        "parrot-element-8": "#8BB4D6",
+        "parrot-element-8": "#E1D3E2",
+        "parrot-element-11":"#E1D3E2",
+      },
+      turtle: {
+        "turtle-element-0":"#2B3F00",
+        "turtle-element-2":"#7CB6EB",
+      },
+      pig: {
+        "pig-element-5":"#7D3C59",
+        "pig-element-6":"#E87FA3",
+        "pig-element-1":"#FFB6CC",
+        "pig-element-2":"#FFB6CC",
+      },
+      rabbit: {
+        "rabbit-element-8":"#FFB6CC",
+        "rabbit-element-4":"#971C3F",
+        "rabbit-element-5":"#FAD7E2",
+        "rabbit-element-3":"#971C3F",
+        "rabbit-element-1":"#FAD7E2",
+      },
+      sheep: {
+        "sheep-element-9":"#C81D5B",
+        "sheep-element-1":"#B37033",
+        "sheep-element-12":"#F2B77E",
+        "sheep-element-4":"#F2B77E",
+        "sheep-element-6":"#FAD7E2",
+        "sheep-element-2":"#FAD7E2",
+        
       },
     };
     
@@ -674,51 +703,84 @@ if (fixedMap) {
     return button;
   }
 
-  addColourButtons() {
+  addColourButtons(selectedImage) {
     const background = this.createChild("div", {
+      id: "colorPaletteContainer",
       styles: {
         display: "flex",
-        "flex-direction": "row",
-        "background-image":
-          "url('https://eyepaint.squidly.com.au/images/EyePaint/palette.png')",
-        "background-size": "100% 100%",
-        "background-position": "left",
-        "background-repeat": "no-repeat",
-      },
-    });
-
-    const colourPicker1 = background.createChild("div", {
-      styles: {
-        display: "flex",
-        "flex-wrap": "wrap",
-        "align-content": "center",
-        width: "45%",
-        "justify-content": "flex-end",
-      },
-    });
-
-    const colourPicker2 = background.createChild("div", {
-      id: "colourPicker",
-      styles: {
-        display: "flex",
-        "flex-wrap": "wrap",
-        "align-content": "center",
-        width: "45%",
         "justify-content": "flex-start",
-        "margin-bottom": "1em",
+        "align-items": "center",
+        width: "100%",
+        height: "95%",
+        overflow: "hidden",    
       },
     });
 
-    colours1.forEach((colour) => {
-      colourPicker1.appendChild(this.createButton(colour, colourPicker1));
-    });
+    const paletteColours = {
+      dog: ["#C04124", "#8B4513"],
+      cat: ["#E3E5E4", "#E98300", "#8CC419"],
+      pig: ["#E34E87", "#FFC1D6", "#EA86A9"],
+      parrot: ["#713509", "#C2E020", "#EEDFB7", "#29A9F1"],
+      rabbit: ["#F9D8E0", "#FFB6CC", "#EA86A9"],
+      sheep: ["#F2B77E", "#F1E9EC", "#D69D6A"],
+      turtle: ["#5FA025", "#536E1B", "#6C612C", "#878124"],
+      horse: ["#F8DCDC", "#D10D84", "#CB7E7A", "#00A1C6"],
+    };
+    
+  
+    fetch("https://eyepaint.squidly.com.au/images/EyePaint/color-palette.svg")  
+      .then(response => response.text())
+      .then(svgText => {
+        const svgElement = SvgPlus.parseSVGString(svgText);
+        svgElement.removeAttribute("width");
+        svgElement.removeAttribute("height");
+        svgElement.setAttribute("preserveAspectRatio", "xMidYMid meet");
 
-    colours2.forEach((colour) => {
-      colourPicker2.appendChild(this.createButton(colour, colourPicker2));
-    });
+        svgElement.style.width = "100%";
+        svgElement.style.height = "auto";
+        svgElement.style.maxHeight = "100%";
+        svgElement.style.maxWidth = "100%";
+        svgElement.style.objectFit = "contain";
+        svgElement.style.display = "block";
+        svgElement.style.cursor = "pointer";
+        svgElement.style.overflow = "visible";
+        svgElement.style.transform = "translateX(-12%)";
 
+      
+        const colorRegions = svgElement.querySelectorAll(".color-icon");
+        const baseColours = paletteColours[selectedImage] || [];
+        const needed = 5 - baseColours.length;
+
+        const randomColours = Array.from({ length: needed }, () => {
+          const h = Math.floor(Math.random() * 360);
+          return `hsl(${h}, 70%, 60%)`;
+        });
+
+        const colours = [...baseColours, ...randomColours];
+
+        colorRegions.forEach((region, i) => {
+          const color = colours[i % colours.length];
+          region.style.fill = color;
+          region.setAttribute("fill", color);
+
+          region.style.cursor = "pointer";
+          region.addEventListener("click", () => {
+            this.selectedColour = color;
+            this.app.set("selectedColour", color);
+          });
+        });
+
+
+    
+        background.appendChild(svgElement);
+      })
+      .catch(err => {
+        console.error("Failed to load palette SVG:", err);
+      });
+  
     return background;
   }
+  
 
   addControlButtons() {
     const controls = this.paintPage.createChild("div", {
