@@ -488,6 +488,13 @@ class EyePaint extends SvgPlus {
     this.canvas = this.createChild("div", {
       id: "canvas",
       styles: {
+        display: "flex",               
+        "align-items": "center",        
+        "justify-content": "center",          
+        "flex-direction": "column",          
+        height: "100%",
+        "max-height": "85%",                 
+        "box-sizing": "border-box",
         border: "10px solid white",
         margin: "1em",
         "box-shadow": "0 4px 8px rgba(0, 0, 0, 0.2)",
@@ -496,10 +503,14 @@ class EyePaint extends SvgPlus {
     // Add in SVG to paint on
     const svgContent = svgAssets[selectedImage];
     const svgElement = SvgPlus.parseSVGString(svgContent);
-    svgElement.style.width = "99%";
+    svgElement.style.width = "auto";
     svgElement.style.height = "auto";
-    svgElement.style.display = "block"; // Center the SVG, by default element is inline
+    svgElement.style.maxWidth = "100%";
+    svgElement.style.maxHeight = "100%";
+    svgElement.style.display = "block";
     svgElement.style.margin = "auto";
+
+    svgElement.style.alignSelf = "center";
     this.canvas.appendChild(svgElement);
     this.paintPage.appendChild(this.canvas);
     
@@ -529,6 +540,8 @@ class EyePaint extends SvgPlus {
       parrot: {
         "parrot-element-8": "#E1D3E2",
         "parrot-element-11":"#E1D3E2",
+        "parrot-element-12":"#713509",
+        "parrot-element-6":"#C02A26"
       },
       turtle: {
         "turtle-element-0":"#2B3F00",
@@ -720,7 +733,7 @@ if (fixedMap) {
       dog: ["#C04124", "#8B4513"],
       cat: ["#E3E5E4", "#E98300", "#8CC419"],
       pig: ["#E34E87", "#FFC1D6", "#EA86A9"],
-      parrot: ["#713509", "#C2E020", "#EEDFB7", "#29A9F1"],
+      parrot: ["#F53214", "#C2E020", "#EEDFB7", "#29A9F1", "#F2C400"],
       rabbit: ["#F9D8E0", "#FFB6CC", "#EA86A9"],
       sheep: ["#F2B77E", "#F1E9EC", "#D69D6A"],
       turtle: ["#5FA025", "#536E1B", "#6C612C", "#878124"],
@@ -858,6 +871,14 @@ if (fixedMap) {
     const elements = svgElement.querySelectorAll(
       "path:not([fixed]), g:not([fixed]), circle:not([fixed]), rect:not([fixed])"
     );
+    const linkedElements = {
+      "parrot-element-7": ["parrot-element-9"],
+      "parrot-element-9": ["parrot-element-7"],
+      "parrot-element-5": ["parrot-element-15"],
+      "parrot-element-15": ["parrot-element-5"],
+      "parrot-element-13": ["parrot-element-14"],
+      "parrot-element-14": ["parrot-element-13"],
+    };
     elements.forEach((element, index) => {
       const elementId = `${this.selectedImage}-element-${index}`;
       element.id = elementId;
@@ -865,12 +886,23 @@ if (fixedMap) {
 
       element.onclick = (e) => {
         if (this.selectedColour) {
-          const update = { id: elementId, color: this.selectedColour };
+          const update = { [elementId]: this.selectedColour };
+      
+          const linked = linkedElements[elementId];
+          if (linked && Array.isArray(linked)) {
+            for (const linkedId of linked) {
+              update[linkedId] = this.selectedColour;
+            }
+          }
+      
           console.log("Sending color update:", update);
           this.applyColourUpdate(update);
-          this.app.set("colorUpdates/" + element.id, this.selectedColour);
+          for (const id in update) {
+            this.app.set("colorUpdates/" + id, update[id]);
+          }
         }
       };
+      
     });
     console.log(`Total elements set up: ${elements.length}`);
   }
