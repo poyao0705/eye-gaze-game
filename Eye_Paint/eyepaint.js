@@ -557,8 +557,8 @@ class EyePaint extends SvgPlus {
         "rabbit-element-8":"#FFB6CC",
         "rabbit-element-4":"#971C3F",
         "rabbit-element-5":"#FAD7E2",
-        "rabbit-element-3":"#971C3F",
-        "rabbit-element-1":"#FAD7E2",
+        "rabbit-element-3":"#EA86A9",
+        "rabbit-element-1":"#EA86A9",
       },
       sheep: {
         "sheep-element-9":"#C81D5B",
